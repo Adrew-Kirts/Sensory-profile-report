@@ -7,8 +7,14 @@
     {{ dump(app.current_route) }}
     {{ dump(app.current_route_parameters) }}
 
-    <a href="{{ path('evaluation.index') }}" class="btn rounded bg-blue-500">Evaluation</a>
+    <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
 
-    <a href="{{ path('patient.index') }}" class="btn rounded bg-blue-500">Patients</a>
+    <a href="{{ path('patient.index') }}" class="btn btn-accent">Patients</a>
+
+    <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
+
+    <a href="{{ path('patient.create') }}" class="btn btn-neutral">Nouveau patient</a>
+
+
 
 {% endblock %}
