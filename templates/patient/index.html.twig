@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello PatientController!{% endblock %}
+
+{% block body %}
+<style>
+
+</style>
+
+
+    List of patients:
+    <ul>
+        {% for patient in patients %}
+        <li>
+            <a href="{{ path('patient.show', {slug: patient.slug}) }}">- {{ patient.FirstName }}</a>
+            <a class="text-blue-400">{{ patient.slug }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

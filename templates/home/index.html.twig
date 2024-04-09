@@ -1,0 +1,14 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sensory Profile Report{% endblock %}
+
+{% block body %}
+    <div class="text-center">Hello base twig</div>
+    {{ dump(app.current_route) }}
+    {{ dump(app.current_route_parameters) }}
+
+    <a href="{{ path('evaluation.index') }}" class="btn rounded bg-blue-500">Evaluation</a>
+
+    <a href="{{ path('patient.index') }}" class="btn rounded bg-blue-500">Patients</a>
+
+{% endblock %}

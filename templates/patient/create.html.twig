@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% endblock %}
+
+{% block body %}
+
+    {{ form_start(form) }}
+<div class="border border-2">
+    {{ form_row(form.first_name) }}
+    {{ form_row(form.last_name) }}
+    {{ form_row(form.birthdate) }}
+
+    {{ form_rest(form) }}
+    <button type="submit">Save</button>
+</div>
+    {{ form_end(form) }}
+
+
+{% endblock %}
