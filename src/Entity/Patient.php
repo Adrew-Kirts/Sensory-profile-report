@@ -3,8 +3,11 @@
 namespace App\Entity;
 
 use App\Repository\PatientRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PatientRepository::class)]
 class Patient
@@ -18,12 +21,15 @@ class Patient
     private ?string $slug = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $first_name = null;
+    #[Assert\NotBlank()]
+    private ?string $first_name = '';
 
     #[ORM\Column(length: 255)]
-    private ?string $last_name = null;
+    #[Assert\NotBlank()]
+    private ?string $last_name = '';
 
     #[ORM\Column(type: Types::DATE_MUTABLE)]
+    #[Assert\NotBlank()]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column]
@@ -31,6 +37,14 @@ class Patient
 
     #[ORM\Column]
     private ?\DateTimeImmutable $updated_at = null;
+
+    #[ORM\OneToMany(targetEntity: Survey::class, mappedBy: 'patient')]
+    private Collection $surveys;
+
+    public function __construct()
+    {
+        $this->surveys = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -105,6 +119,36 @@ class Patient
     public function setUpdatedAt(\DateTimeImmutable $updated_at): static
     {
         $this->updated_at = $updated_at;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Survey>
+     */
+    public function getSurveys(): Collection
+    {
+        return $this->surveys;
+    }
+
+    public function addSurvey(Survey $survey): static
+    {
+        if (!$this->surveys->contains($survey)) {
+            $this->surveys->add($survey);
+            $survey->setPatient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSurvey(Survey $survey): static
+    {
+        if ($this->surveys->removeElement($survey)) {
+            // set the owning side to null (unless already changed)
+            if ($survey->getPatient() === $this) {
+                $survey->setPatient(null);
+            }
+        }
 
         return $this;
     }

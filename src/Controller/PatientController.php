@@ -6,7 +6,6 @@ use App\Entity\Patient;
 use App\Form\PatientType;
 use App\Repository\PatientRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Message\Body;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,8 +39,6 @@ class PatientController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            $patient->setCreatedAt(new \DateTimeImmutable());
-
             $entityManager->persist($patient);
             $entityManager->flush();
             $this->addFlash('success', 'La fiche patient a bien été créée');
@@ -63,7 +60,7 @@ class PatientController extends AbstractController
             $entityManager->persist($patient);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Patient updated successfully');
+            $this->addFlash('success', 'Patient mis à jour');
         }
 
         return $this->render('patient/edit.html.twig', [
@@ -89,9 +86,12 @@ class PatientController extends AbstractController
     public function search(PatientRepository $repository, Request $request): Response
     {
         $keyword = $request->query->get('keyword');
-        $patients = $repository->findByKeyword($keyword);
-        return $this->render('patient/index.html.twig', [
-            'patients' => $patients,
-        ]);
+        if ($patients = $repository->findByKeyword($keyword)){
+            return $this->render('patient/index.html.twig', [
+                'patients' => $patients,
+            ]);
+        }
+        $this->addFlash('error', 'Pas de patient avec ce nom');
+        return $this->render('home/index.html.twig');
     }
 }

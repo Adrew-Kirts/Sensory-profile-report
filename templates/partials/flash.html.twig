@@ -1,5 +1,19 @@
 {% for type, messages in app.flashes %}
-    <div class="alert alert-{{ type }}">
-        {{ messages | join('. ') }}
+
+    <div role="alert" class="alert alert-{{ type }} w-max m-4">
+        <button type="button" class="btn btn-accent btn-sm">
+            x
+        </button>
+        <span>
+            {{ messages | join('. ') }}
+        </span>
     </div>
 {% endfor %}
+
+<script>
+    document.querySelectorAll('.alert button').forEach(function(button) {
+        button.addEventListener('click', function() {
+            this.parentNode.remove();
+        });
+    });
+</script>

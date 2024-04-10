@@ -8,8 +8,6 @@
 </style>
 
 <div class="overflow-x-auto">
-    <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
-
     <table class="table w-max">
             <thead>
             <tr>
@@ -48,5 +46,6 @@
             </tr>
             {% endfor %}
         </table>
+    <a href="{{ path('patient.create') }}" class="btn btn-secondary btn-sm">Nouveau patient</a>
 </div>
 {% endblock %}
