@@ -25,6 +25,7 @@ class PatientRepository extends ServiceEntityRepository
     {
         return $this->createQueryBuilder('r')
             ->where('r.first_name LIKE :keyword')
+            ->orWhere('r.last_name LIKE :keyword')
             ->orderBy('r.updated_at', 'ASC')
             ->setParameter('keyword', '%'.$keyword.'%')
             ->getQuery()

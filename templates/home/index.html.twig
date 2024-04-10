@@ -3,18 +3,18 @@
 {% block title %}Sensory Profile Report{% endblock %}
 
 {% block body %}
-    <div class="text-center">Hello base twig</div>
-    {{ dump(app.current_route) }}
-    {{ dump(app.current_route_parameters) }}
-
     <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
 
     <a href="{{ path('patient.index') }}" class="btn btn-accent">Patients</a>
 
     <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
 
-    <a href="{{ path('patient.create') }}" class="btn btn-neutral">Nouveau patient</a>
-
-
+    <div class="mt-12">
+        <form action="/patients/search" method="get">
+            <label for="search-input">Chercher patient:</label>
+            <input type="search" id="search-input" name="keyword" class="input-base border-2">
+            <button type="submit" class="btn btn-neutral mt-4">Chercher</button>
+        </form>
+    </div>
 
 {% endblock %}

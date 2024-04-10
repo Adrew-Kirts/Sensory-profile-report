@@ -1,0 +1,17 @@
+<div class="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
+    {{ form_start(form) }}
+    <div class="space-y-4">
+        <div>
+            {{ form_row(form.first_name, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div>
+            {{ form_row(form.last_name, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+        <div>
+            {{ form_row(form.birthdate, {'attr': {'class': 'input input-bordered w-full'}}) }}
+        </div>
+    </div>
+    {{ form_rest(form) }}
+    <button type="submit" class="btn btn-primary w-full mt-4">Enregistrer</button>
+    {{ form_end(form) }}
+</div>

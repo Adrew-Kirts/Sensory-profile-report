@@ -4,8 +4,11 @@
 
 {% block body %}
 
-    {{ form(form) }}
-    <button type="submit">Save</button>
+    <div class="flex flex-col items-center justify-center md:mt-36">
+        <h1 class="uppercase text-xl mb-10">Editer une fiche patient</h1>
 
+        {{ include('partials/form.html.twig') }}
+
+    </div>
 
 {% endblock %}

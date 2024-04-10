@@ -5,26 +5,55 @@ namespace App\Controller;
 use App\Entity\Patient;
 use App\Form\PatientType;
 use App\Repository\PatientRepository;
-use DateTime;
-use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use http\Message\Body;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use function Symfony\Component\Clock\now;
 
 class PatientController extends AbstractController
 {
+    #[Route('/patients', name: 'patient.index')]
+    public function index(PatientRepository $repository): Response
+    {
+        $patients = $repository->findAll();
+        return $this->render('patient/index.html.twig', [
+            'patients' => $patients,
+            'controller_name' => 'PatientController',
+        ]);
+    }
 
-//    #[Route ('/patient/new', name: 'patient.new')]
-//    public function create(Request $request, Body $body)
-//    {
-//
-//    }
+    #[Route('/patient/{slug}-{id}', name: 'patient.show', requirements: ['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'])]
+    public function show(Patient $patient): Response
+    {
+        return $this->render('patient/show.html.twig', [
+            'patient' => $patient,
+        ]);
+    }
 
-    #[Route('/patient/{slug}/edit', name: 'patient.edit')]
+    #[Route('/patients/create', name: 'patient.create')]
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $patient = new Patient();
+        $form = $this->createForm(PatientType::class, $patient);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+//            $patient->setCreatedAt(new \DateTimeImmutable());
+
+            $entityManager->persist($patient);
+            $entityManager->flush();
+            $this->addFlash('success', 'La fiche patient a bien été créée');
+            return $this->redirectToRoute('patient.index');
+        }
+        return $this->render('patient/create.html.twig', [
+            'form' => $form
+        ]);
+    }
+
+    //Passing patient entity param to let sf *magically* find patient
+    #[Route('/patient/{slug}-{id}/edit', name: 'patient.edit', requirements: ['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'], methods: ['GET', 'POST'])]
     public function edit(Patient $patient, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(PatientType::class, $patient);
@@ -43,67 +72,26 @@ class PatientController extends AbstractController
         ]);
     }
 
-
-    #[Route('/patients/search/{keyword}', name: 'patient.search')]
-    public function search(PatientRepository $repository, string $keyword): Response
+    //Using slug and id params to find patient
+    #[Route('/patient/{slug}-{id}/delete', name: 'patient.delete', requirements: ['slug' => '[a-zA-Z0-9-]+', 'id' => '[0-9]+'], methods: ['DELETE'])]
+    public function delete(string $slug, int $id, PatientRepository $repository, EntityManagerInterface $entityManager): Response
     {
+        if ($patient = $repository->findOneBy(['slug' => $slug, 'id' =>$id]))
+        {
+            $entityManager->remove($patient);
+            $entityManager->flush();
+            $this->addFlash('success', 'Patient supprimé avec succès');
+        }
+        return $this->redirectToRoute('patient.index');
+    }
+
+    #[Route('/patients/search', name: 'patient.search')]
+    public function search(PatientRepository $repository, Request $request): Response
+    {
+        $keyword = $request->query->get('keyword');
         $patients = $repository->findByKeyword($keyword);
         return $this->render('patient/index.html.twig', [
             'patients' => $patients,
         ]);
-    }
-
-
-    #[Route('/patients', name: 'patient.index')]
-    public function index(PatientRepository $repository): Response
-    {
-        $patients = $repository->findAll();
-        return $this->render('patient/index.html.twig', [
-            'patients' => $patients,
-            'controller_name' => 'PatientController',
-        ]);
-    }
-
-    #[Route('/patient/{slug}', name: 'patient.show', requirements: ['slug' => '[a-zA-Z0-9-]+'])]
-    public function show(PatientRepository $repository, string $slug): Response
-    {
-        $patient = $repository->findOneBy(['slug' => $slug]);
-        return $this->render('patient/show.html.twig', [
-            'patient' => $patient,
-        ]);
-    }
-
-    #[Route('/patients/create', name: 'patient.create')]
-    public function create(PatientRepository $repository, Request $request, EntityManagerInterface $entityManager): Response
-    {
-        $patient = new Patient();
-        $form = $this->createForm(PatientType::class, $patient);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($patient);
-            $entityManager->flush();
-            $this->addFlash('success', 'La fiche patient a bien été créée');
-            return $this->redirectToRoute('patient.index');
-            }
-        return $this->render('patient/create.html.twig', [
-            'form' => $form
-        ]);
-
-//        $patient->setSlug('DH489FG57')
-//            ->setFirstName('Eva')
-//            ->setLastName('Green')
-//            ->setBirthdate(new \DateTime('2006-04-05'))
-//            ->setCreatedAt(new \DateTimeImmutable());
-//
-//        $entityManager->persist($patient);
-//        $entityManager->flush();
-//
-//        $patients = $repository->findAll();
-//
-//        return $this->render('patient/index.html.twig', [
-//           'patients' => $patients
-//        ]);
-
     }
 }
