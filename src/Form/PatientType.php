@@ -35,7 +35,7 @@ class PatientType extends AbstractType
         if (!($data instanceof Patient)){
             return;
         }
-            $data->setUpdatedAt(new \DateTimeImmutable());
+            $data->setUpdatedAt(new \DateTime());
         if (!$data->getId()){
             $data->setCreatedAt(new \DateTimeImmutable());
         }

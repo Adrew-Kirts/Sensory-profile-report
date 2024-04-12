@@ -35,11 +35,14 @@ class Patient
     #[ORM\Column]
     private ?\DateTimeImmutable $created_at = null;
 
-    #[ORM\Column]
-    private ?\DateTimeImmutable $updated_at = null;
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    private ?\DateTime $updated_at = null;
 
     #[ORM\OneToMany(targetEntity: Survey::class, mappedBy: 'patient')]
     private Collection $surveys;
+
+    #[ORM\ManyToOne(inversedBy: 'patients')]
+    private ?User $user = null;
 
     public function __construct()
     {
@@ -111,12 +114,12 @@ class Patient
         return $this;
     }
 
-    public function getUpdatedAt(): ?\DateTimeImmutable
+    public function getUpdatedAt(): ?\DateTime
     {
         return $this->updated_at;
     }
 
-    public function setUpdatedAt(\DateTimeImmutable $updated_at): static
+    public function setUpdatedAt(\DateTime $updated_at): static
     {
         $this->updated_at = $updated_at;
 
@@ -149,6 +152,18 @@ class Patient
                 $survey->setPatient(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

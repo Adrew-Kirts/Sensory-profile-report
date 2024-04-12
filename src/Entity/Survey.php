@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SurveyRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SurveyRepository::class)]
@@ -17,12 +19,19 @@ class Survey
     #[ORM\JoinColumn(nullable: false)]
     private ?Patient $patient = null;
 
-    #[ORM\ManyToOne(inversedBy: 'surveys')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Question $question = null;
+    /**
+     * @var Collection<int, SurveyAnswer>
+     */
+    #[ORM\OneToMany(targetEntity: SurveyAnswer::class, mappedBy: 'survey')]
+    private Collection $surveyAnswer;
 
-    #[ORM\Column]
-    private ?int $answer = null;
+    #[ORM\ManyToOne(inversedBy: 'surveys')]
+    private ?User $user = null;
+
+    public function __construct()
+    {
+        $this->surveyAnswer = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -41,26 +50,44 @@ class Survey
         return $this;
     }
 
-    public function getQuestion(): ?Question
+    /**
+     * @return Collection<int, SurveyAnswer>
+     */
+    public function getSurveyAnswer(): Collection
     {
-        return $this->question;
+        return $this->surveyAnswer;
     }
 
-    public function setQuestion(?Question $question): static
+    public function addSurveyAnswer(SurveyAnswer $surveyAnswer): static
     {
-        $this->question = $question;
+        if (!$this->surveyAnswer->contains($surveyAnswer)) {
+            $this->surveyAnswer->add($surveyAnswer);
+            $surveyAnswer->setSurvey($this);
+        }
 
         return $this;
     }
 
-    public function getAnswer(): ?int
+    public function removeSurveyAnswer(SurveyAnswer $surveyAnswer): static
     {
-        return $this->answer;
+        if ($this->surveyAnswer->removeElement($surveyAnswer)) {
+            // set the owning side to null (unless already changed)
+            if ($surveyAnswer->getSurvey() === $this) {
+                $surveyAnswer->setSurvey(null);
+            }
+        }
+
+        return $this;
     }
 
-    public function setAnswer(int $answer): static
+    public function getUser(): ?User
     {
-        $this->answer = $answer;
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        $this->user = $user;
 
         return $this;
     }

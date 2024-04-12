@@ -21,12 +21,17 @@ To install and set up the project, follow these steps:
    npm install
    ```
 
-4. Start the compiler to watch for changes:
+4. Load fixtures to seed database with the survey questions
+   ```
+   php bin/console doctrine:fixtures:load
+   ```
+
+5. Start the compiler to watch for changes:
    ```
    npm run watch
    ```
 
-5. Run the php server to start the application:
+6. Run the php server to start the application:
    ```
    php -S localhost:8000 -t public
    ```
@@ -36,10 +41,20 @@ Or use Symfony server:
    symfony server:start
    ```
 
-6. Access the application in your browser at `http://localhost:8000`.
+7. Access the application in your browser at `http://localhost:8000`
 
 ## Usage
 Once the project is set up and running, you can use it to generate Sensory Profile 2 reports. The application will provide scoring and interpretation based on the sensory profile data entered.
+
+## Handy commands
+
+Clear database `php bin/console doctrine:database:drop --force`
+
+Create database `php bin/console doctrine:database:create`
+
+Migrate migrations `php bin/console doctrine:migrations:migrate`
+
+Load fixtures `php bin/console doctrine:fixtures:load`
 
 ## Technologies Used
 - Symfony: PHP framework for backend development

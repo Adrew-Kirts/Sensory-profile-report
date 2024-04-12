@@ -1,0 +1,80 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Questionnaire{% endblock %}
+
+{% block body %}
+    <style>
+    </style>
+
+    <div class="flex flex-col text-center">
+        <a class="text-2xl">Questionnaire</a>
+        {% set ageCategories = {
+            0: 'nourrisson (0-6 mois)',
+            1: 'jeune enfant (7-35 mois)',
+            2: 'enfant (3-14 ans)',
+            3: 'compagnon scolaire (3-14 ans)',
+            4: 'adult/adolescent (11-65+ ans)'
+        } %}
+        <a class="text-xl">{{ ageCategories[ageCategory] ?? 'Unknown' }}</a>
+    </div>
+
+    <div class="overflow-x-auto">
+        <table class="table table-zebra">
+            <thead>
+            <tr>
+                <th>Numéro</th>
+                <th>Question</th>
+                <th>Réponse</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for question in questions %}
+            </tbody>
+            <tr class="hover:bg-accent">
+                <td>
+                    {{ question.questionNumber }}
+                </td>
+                <td>
+                    {{ question.questionText }}
+                </td>
+                <td>
+                    <div class="flex flex-row-reverse">
+                        <div>
+                            <label for="answer0">0</label>
+                            <input type="radio" id="answer0" name="question{{ question.questionNumber }}" value="0"
+                                   checked/>
+                        </div>
+
+                        <div>
+                            <label for="answer1">1</label>
+                            <input type="radio" id="answer1" name="question{{ question.questionNumber }}" value="1"/>
+                        </div>
+
+                        <div>
+                            <label for="answer2">2</label>
+                            <input type="radio" id="answer2" name="question{{ question.questionNumber }}" value="2"/>
+                        </div>
+
+                        <div>
+                            <label for="answer3">3</label>
+                            <input type="radio" id="answer3" name="question{{ question.questionNumber }}" value="3"/>
+                        </div>
+
+                        <div>
+                            <label for="answer4">4</label>
+                            <input type="radio" id="answer4" name="question{{ question.questionNumber }}" value="4"/>
+
+                        </div>
+
+                        <div>
+                            <label for="answer5">5</label>
+                            <input type="radio" id="answer5" name="question{{ question.questionNumber }}" value="5"/>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            {% endfor %}
+        </table>
+        <button type="submit" class="btn btn-primary w-full mt-4">Enregistrer</button>
+    </div>
+{% endblock %}
