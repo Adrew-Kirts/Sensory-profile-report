@@ -1,0 +1,93 @@
+
+{#{% extends 'base.html.twig' %}#}
+
+{#{% block title %}Register{% endblock %}#}
+
+{#{% block body %}#}
+{#    <form method="post" class="max-w-md mx-auto mt-8">#}
+{#        {{ form_errors(registrationForm) }}#}
+
+{#        {{ form_start(registrationForm) }}#}
+{#        <h1 class="text-2xl font-bold mb-3">Register</h1>#}
+{#        #}
+{#        <label for="inputFirstName" class="block mb-1">First Name</label>#}
+{#        {{ form_row(registrationForm.firstName) }}#}
+
+{#        <label for="inputLastName" class="block mb-1">Last Name</label>#}
+{#        {{ form_row(registrationForm.lastName) }}#}
+
+{#        <label for="inputUsername" class="block mb-1">Username</label>#}
+{#        {{ form_row(registrationForm.username) }}#}
+
+{#        <label for="inputEmail" class="block mb-1">Email</label>#}
+{#        {{ form_row(registrationForm.email) }}#}
+
+{#        <label for="inputPassword" class="block mb-1">Password</label>#}
+{#        {{ form_row(registrationForm.plainPassword, {#}
+{#            label: 'Password'#}
+{#        }) }}#}
+
+{#        {{ form_row(registrationForm.agreeTerms) }}#}
+
+{#        <button type="submit" class="btn btn-primary">#}
+{#            Register#}
+{#        </button>#}
+{#        {{ form_end(registrationForm) }}#}
+{#    </form>#}
+{#{% endblock %}#}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <form method="post" class="max-w-md mx-auto mt-8 bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        {{ form_errors(registrationForm) }}
+
+        {{ form_start(registrationForm) }}
+        <h1 class="text-2xl font-bold mb-3">Register</h1>
+
+{#        <label for="inputFirstName" class="block text-gray-700 text-sm font-bold mb-1">First Name</label>#}
+        {{ form_row(registrationForm.firstName, {
+            attr: {
+                class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }
+        }) }}
+
+{#        <label for="inputLastName" class="block text-gray-700 text-sm font-bold mb-1">Last Name</label>#}
+        {{ form_row(registrationForm.lastName, {
+            attr: {
+                class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }
+        }) }}
+
+{#        <label for="inputUsername" class="block text-gray-700 text-sm font-bold mb-1">Username</label>#}
+        {{ form_row(registrationForm.username, {
+            attr: {
+                class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }
+        }) }}
+
+{#        <label for="inputEmail" class="block text-gray-700 text-sm font-bold mb-1">Email</label>#}
+        {{ form_row(registrationForm.email, {
+            attr: {
+                class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }
+        }) }}
+
+{#        <label for="inputPassword" class="block text-gray-700 text-sm font-bold mb-1">Password</label>#}
+        {{ form_row(registrationForm.plainPassword, {
+            label: 'Password',
+            attr: {
+                class: 'shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
+            }
+        }) }}
+
+        {{ form_row(registrationForm.agreeTerms) }}
+
+        <button type="submit" class="bg-accent hover:bg-primary text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">
+            Register
+        </button>
+        {{ form_end(registrationForm) }}
+    </form>
+{% endblock %}

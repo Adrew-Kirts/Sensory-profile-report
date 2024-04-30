@@ -10,12 +10,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 class PatientController extends AbstractController
 {
     #[Route('/patients', name: 'patient.index')]
+    #[IsGranted('ROLE_USER')]
     public function index(PatientRepository $repository): Response
     {
+//        $this->denyAccessUnlessGranted('ROLE_USER');
         $patients = $repository->findAll();
         return $this->render('patient/index.html.twig', [
             'patients' => $patients,
