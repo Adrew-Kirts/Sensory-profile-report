@@ -3,12 +3,14 @@
 {% block title %}Sensory Profile Report{% endblock %}
 
 {% block body %}
-    <div class="flex flex-row">
-    <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
+    <div class="flex flex-row space-x-4">
+        <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
 
-    <a href="{{ path('patient.index') }}" class="btn btn-accent">Patients</a>
+        <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
 
-    <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
+        <a href="{{ path('patient.index') }}" class="btn btn-accent">Patients</a>
+
+        <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
     </div>
 
     <div class="mt-12">

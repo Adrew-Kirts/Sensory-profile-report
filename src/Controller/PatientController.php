@@ -6,6 +6,7 @@ use App\Entity\Patient;
 use App\Form\PatientType;
 use App\Repository\PatientRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use http\Client\Curl\User;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,8 +19,8 @@ class PatientController extends AbstractController
     #[IsGranted('ROLE_USER')]
     public function index(PatientRepository $repository): Response
     {
-//        $this->denyAccessUnlessGranted('ROLE_USER');
-        $patients = $repository->findAll();
+//        $patients = $repository->findAll();
+        $patients = $repository->findBy(['user' => $this->getUser()]);
         return $this->render('patient/index.html.twig', [
             'patients' => $patients,
             'controller_name' => 'PatientController',
@@ -38,6 +39,7 @@ class PatientController extends AbstractController
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
         $patient = new Patient();
+        $patient->setUser($this->getUser());
         $form = $this->createForm(PatientType::class, $patient);
         $form->handleRequest($request);
 
