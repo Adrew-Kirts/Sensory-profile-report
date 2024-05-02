@@ -1,39 +1,43 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Questionnaire{% endblock %}
+{% block title %}Survey{% endblock %}
 
 {% block body %}
-    <style>
-    </style>
 
-    <div>
-{#        <table class="table w-max">#}
-{#            <thead>#}
-{#            <tr>#}
-{#                <th>Prénom</th>#}
-{#                <th>Nom de famille</th>#}
-{#                <th>Date de naissance</th>#}
-{#                <th>Nombre de questionnaires remplis</th>#}
-{#            </tr>#}
-{#            </thead>#}
-{#            <tbody>#}
-{#            </tbody>#}
-{#            <tr class="text-center">#}
-{#                <td>#}
-{#                    <a>{{ patient.FirstName }}</a>#}
-{#                </td>#}
-{#                <td>#}
-{#                    <a>{{ patient.LastName }}</a>#}
-{#                </td>#}
-{#                <td>#}
-{#                    <a>{{ patient.birthdate | date('d-m-y') }}</a>#}
-{#                </td>#}
-{#                <td>#}
-{#                    <a> {{ patient.surveys.count | default('Pas de questionnaires rempli') }}</a>#}
-{#                </td>#}
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Réponses questionnaire</h1>
+        <div>
+            <strong>Questionnaire ID:</strong> {{ survey.id }}<br>
+            <strong>Patient:</strong> {{ survey.patient.firstName }} {{ survey.patient.lastName }}<br>
+            <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }} (<strong>{{ survey.patient.age }} ans</strong>)<br>
 
-{#            </tr>#}
-{#        </table>#}
-        {{ dd(questions) }}
+        </div>
+
+        <h2 class="text-xl font-bold my-4">Réponses</h2>
+        <table class="table table-compact w-full">
+            <thead>
+            <tr>
+                <th>#</th>
+                <th>Question</th>
+                <th>Answer</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for answer in answers %}
+                <tr>
+                    <td>{{ answer.id }}</td>
+                    <td>{{ answer.question.questionText }}</td>
+                    <td>{{ answer.answer }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
     </div>
+
+    {{ survey.id  }} {{ survey.patient.firstName }} {{ survey.patient.lastName }}
+
+    {{ dump(survey) }}
+
+    {{ dump(answers) }}
+
 {% endblock %}

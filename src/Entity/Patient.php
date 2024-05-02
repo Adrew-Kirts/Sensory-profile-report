@@ -49,6 +49,16 @@ class Patient
         $this->surveys = new ArrayCollection();
     }
 
+    public function getAge(): ?int
+    {
+        if ($this->birthdate === null) {
+            return null;
+        }
+        $today = new \DateTime('now');
+        return $today->diff($this->birthdate)->y;
+    }
+
+
     public function getId(): ?int
     {
         return $this->id;
