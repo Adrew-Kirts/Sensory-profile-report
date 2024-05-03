@@ -23,7 +23,7 @@ To install and set up the project, follow these steps:
 
 4. Load fixtures to seed database with the survey questions
    ```
-   php bin/console doctrine:fixtures:load
+   php bin/console doctrine:fixtures:load --fixtures=src/DataFixtures/SurveyQuestions/
    ```
 
 5. Start the compiler to watch for changes:
@@ -55,6 +55,8 @@ Create database `php bin/console doctrine:database:create`
 Migrate migrations `php bin/console doctrine:migrations:migrate`
 
 Load fixtures `php bin/console doctrine:fixtures:load`
+
+Or only load specific fixtures: `php bin/console doctrine:fixtures:load --fixtures=src/DataFixtures/SurveyQuestions/`
 
 ## Technologies Used
 - Symfony: PHP framework for backend development

@@ -28,8 +28,8 @@ class Question
     #[ORM\Column]
     private ?int $ageCategory = null;
 
-    #[ORM\OneToMany(targetEntity: Survey::class, mappedBy: 'question')]
-    private Collection $surveys;
+//    #[ORM\OneToMany(targetEntity: Survey::class, mappedBy: 'question')]
+//    private Collection $surveys;
 
     /**
      * @var Collection<int, SurveyAnswer>
@@ -39,7 +39,7 @@ class Question
 
     public function __construct()
     {
-        $this->surveys = new ArrayCollection();
+//        $this->surveys = new ArrayCollection();
         $this->surveyAnswers = new ArrayCollection();
     }
 

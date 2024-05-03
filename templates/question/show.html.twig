@@ -1,105 +1,8 @@
-{# {% extends 'base.html.twig' %} #}
-
-{# {% block title %}Questionnaire{% endblock %} #}
-
-{# {% block body %} #}
-{#    <style> #}
-{#    </style> #}
-
-{#    <div class="flex flex-col text-center"> #}
-{#        <a class="text-2xl">Questionnaire</a> #}
-{#        {% set ageCategories = { #}
-{#            0: 'nourrisson (0-6 mois)', #}
-{#            1: 'jeune enfant (7-35 mois)', #}
-{#            2: 'enfant (3-14 ans)', #}
-{#            3: 'compagnon scolaire (3-14 ans)', #}
-{#            4: 'adult/adolescent (11-65+ ans)' #}
-{#        } %} #}
-{#        <a class="text-xl">{{ ageCategories[ageCategory] ?? 'Unknown' }}</a> #}
-{#    </div> #}
-
-{#    <div class="overflow-x-auto"> #}
-{#        <table class="table table-zebra"> #}
-{#            <thead> #}
-{#            <tr> #}
-{#                <th>Numéro</th> #}
-{#                <th>Question</th> #}
-{#                <th>Réponse</th> #}
-{#            </tr> #}
-{#            </thead> #}
-{#            <tbody> #}
-{#            {% for question in questions %} #}
-{#            </tbody> #}
-{#            <tr class="hover:bg-accent"> #}
-{#                <td> #}
-{#                    {{ question.questionNumber }} #}
-{#                </td> #}
-{#                <td> #}
-{#                    {{ question.questionText }} #}
-{#                </td> #}
-{#                <td> #}
-{#                    <div class="flex flex-row-reverse"> #}
-{#                        <div> #}
-{#                            <label for="answer0">0</label> #}
-{#                            <input type="radio" id="answer0" name="question{{ question.questionNumber }}" value="0" #}
-{#                                   checked/> #}
-{#                        </div> #}
-
-{#                        <div> #}
-{#                            <label for="answer1">1</label> #}
-{#                            <input type="radio" id="answer1" name="question{{ question.questionNumber }}" value="1"/> #}
-{#                        </div> #}
-
-{#                        <div> #}
-{#                            <label for="answer2">2</label> #}
-{#                            <input type="radio" id="answer2" name="question{{ question.questionNumber }}" value="2"/> #}
-{#                        </div> #}
-
-{#                        <div> #}
-{#                            <label for="answer3">3</label> #}
-{#                            <input type="radio" id="answer3" name="question{{ question.questionNumber }}" value="3"/> #}
-{#                        </div> #}
-
-{#                        <div> #}
-{#                            <label for="answer4">4</label> #}
-{#                            <input type="radio" id="answer4" name="question{{ question.questionNumber }}" value="4"/> #}
-
-{#                        </div> #}
-
-{#                        <div> #}
-{#                            <label for="answer5">5</label> #}
-{#                            <input type="radio" id="answer5" name="question{{ question.questionNumber }}" value="5"/> #}
-{#                        </div> #}
-{#                    </div> #}
-{#                </td> #}
-{#            </tr> #}
-{#            {% endfor %} #}
-{#        </table> #}
-{#        <button type="submit" class="btn btn-primary w-full mt-4">Enregistrer</button> #}
-{#    </div> #}
-{# {% endblock %} #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Questionnaire{% endblock %}
 
 {% block body %}
-
-    <div class="dropdown">
-        <div tabindex="0" role="button" class="btn m-1">Choisir patient</div>
-        <ul tabindex="0" class="dropdown-content z-[1] menu p-2 shadow bg-base-100 rounded-box w-52">
-            {% for patient in patients %}
-                {#                <li> #}
-                {#                    <label> #}
-                {#                        <input type="text" value="{{ patient.firstName }} {{ patient.lastName }}" class="input input-bordered w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"> #}
-                {#                    </label> #}
-                {#                </li> #}
-                <li onclick="setPatient('{{ patient.id }}')">
-                    <a>{{ patient.firstName }} {{ patient.lastName }}</a>
-                </li>
-            {% endfor %}
-        </ul>
-    </div>
 
     <div class="flex flex-col text-center">
         <a class="text-2xl">Questionnaire</a>
@@ -114,9 +17,17 @@
     </div>
 
     <form action="{{ path('question.saveAnswers', {'ageCategory': ageCategory}) }}" method="POST">
-        <input type="hidden" id="selectedPatientId" name="patientId" value="">
+        <label>
+            <select class="select select-accent w-full max-w-xs" name="patientId">
+                <option disabled selected>Choisir patient</option>
+                {% for patient in patients %}
+                    <option value="{{ patient.id }}">{{ patient.firstName }} {{ patient.lastName }}</option>
+                {% endfor %}
+            </select>
+        </label>
+
         <div class="overflow-x-auto">
-            <table class="table table-zebra">
+            <table class="table">
                 <thead>
                 <tr>
                     <th>Numéro</th>
@@ -147,11 +58,5 @@
         </div>
     </form>
 
-    <script>
-        function setPatient(id) {
-            document.getElementById('selectedPatientId').value = id;
-            alert('Patient selected: ' + id);
-        }
-    </script>
 {% endblock %}
 

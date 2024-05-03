@@ -1,11 +1,8 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello patient page!{% endblock %}
+{% block title %}Profil patient{% endblock %}
 
 {% block body %}
-    <style>
-    </style>
-
     <div>
         <table class="table w-max">
             <thead>
@@ -13,7 +10,7 @@
                 <th>Prénom</th>
                 <th>Nom de famille</th>
                 <th>Date de naissance</th>
-                <th>Nombre de questionnaires remplis</th>
+                <th>Profils sensoriels</th>
             </tr>
             </thead>
             <tbody>
@@ -29,10 +26,22 @@
                     <a>{{ patient.birthdate | date('d-m-y') }}</a>
                 </td>
                 <td>
-                    <a> {{ patient.surveys.count | default('Pas de questionnaires rempli') }}</a>
+                    {% if patient.surveys|length == 0 %}
+                        <a>Pas de profil sensoriel rempli</a>
+                    {% endif %}
+
+                        <div class="flex flex-col space-y-2">
+                            {% for survey in patient.surveys %}
+                                <a href="{{ path('survey.show', {id: survey.id}) }}" class="btn btn-sm inline-flex items-center px-2 py-1 bg-accent text-white font-medium text-xs leading-tight rounded shadow-md hover:bg-accent-hover focus:outline-none focus:ring-0 transition duration-150 ease-in-out tooltip" data-tip="Visionner résultats">
+                                    {{ survey.createdAt | date('d-m-y') }}
+                                    <svg class="ml-1 w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"></path></svg>
+                                </a>
+                            {% endfor %}
+                        </div>
                 </td>
 
             </tr>
         </table>
     </div>
+
 {% endblock %}

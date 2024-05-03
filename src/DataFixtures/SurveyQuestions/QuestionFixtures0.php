@@ -1,12 +1,12 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\DataFixtures\SurveyQuestions;
 
 use App\Entity\Question;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
-class QuestionFixtures extends Fixture
+class QuestionFixtures0 extends Fixture
 {
     public function load(ObjectManager $manager): void
     {

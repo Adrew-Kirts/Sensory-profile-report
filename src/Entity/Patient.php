@@ -49,15 +49,37 @@ class Patient
         $this->surveys = new ArrayCollection();
     }
 
-    public function getAge(): ?int
+//    public function getAge(): ?int
+//    {
+//        if ($this->birthdate === null) {
+//            return null;
+//        }
+//        $today = new \DateTime('now');
+//        return $today->diff($this->birthdate)->y;
+//    }
+
+    public function getAge(): ?string
     {
         if ($this->birthdate === null) {
             return null;
         }
         $today = new \DateTime('now');
-        return $today->diff($this->birthdate)->y;
-    }
+        $interval = $today->diff($this->birthdate);
 
+        $years = $interval->y;
+        $months = $interval->m;
+
+        if ($years === 1 && $months === 0) {
+            return sprintf("%d an", $years);
+        } elseif ($years === 1 && $months > 0) {
+            return sprintf("%d an et %d mois", $years, $months);
+        } elseif ($years === 0) {
+            return sprintf("%d mois", $months);
+        } elseif ($months === 0) {
+            return sprintf("%d ans", $years);
+        }
+        return sprintf("%d ans et %d mois", $years, $months);
+    }
 
     public function getId(): ?int
     {

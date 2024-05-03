@@ -3,21 +3,27 @@
 {% block title %}Sensory Profile Report{% endblock %}
 
 {% block body %}
-    <div class="flex flex-row space-x-4">
-        <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
+    {% block back_button %}{% endblock %}
 
-        <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
+    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
+        {% endif %}
 
-        <a href="{{ path('patient.index') }}" class="btn btn-accent">Patients</a>
-
-        <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
+            <a href="{{ path('patient.index') }}" class="btn btn-accent">Liste des patients</a>
+            <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
+        {% endif %}
     </div>
 
-    <div class="mt-12">
-        <form action="/patients/search" method="get">
-            <label for="search-input">Chercher patient:</label>
-            <input type="search" id="search-input" name="keyword" class="input-base border-2">
-            <button type="submit" class="btn btn-neutral btn-sm mt-4">Chercher</button>
-        </form>
-    </div>
+    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+        <div class="mt-12 px-4 sm:px-0">
+            <form action="/patients/search" method="get" class="flex flex-col sm:flex-row items-center gap-4">
+                <label for="search-input" class="block sm:mb-0">Chercher patient:</label>
+                <input type="search" id="search-input" name="keyword" class="input-base border-2 flex-grow">
+                <button type="submit" class="btn btn-neutral btn-sm mt-4 sm:mt-0">Chercher</button>
+            </form>
+        </div>
+    {% endif %}
 {% endblock %}
