@@ -16,7 +16,7 @@ class PatientFixtures extends Fixture
 
         for ($i = 0; $i < 5; $i++) {
             $patient = new Patient();
-            $patient->setBirthdate($faker->dateTimeBetween('-80 years', '-18 years'));
+            $patient->setBirthdate($faker->dateTimeBetween('-80 years', '-2 years'));
             $patient->setLastName($faker->lastName);
             $patient->setFirstName($faker->firstName);
             $patient->setSlug($i);

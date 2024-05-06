@@ -3,35 +3,35 @@
 {% block title %}Nouvelle evaluation{% endblock %}
 
 {% block body %}
-    <h1 class="text-xl">Questionnaire par tranche d'âge</h1>
+    <h1 class="text-xl">Profil sensoriel par tranche d'âge</h1>
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-        <div class="card bordered">
+        <div class="card border-2 border-accent">
             <div class="card-body">
-                <h2 class="card-title">Nourrisson (0-6M)</h2>
+                <h2 class="card-title text-nowrap">Nourrisson (0-6M)</h2>
                 <a href="{{ path('question.indexByAge', {'ageCategory': 0}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
-        <div class="card bordered">
+        <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title">Jeune enfant (7-35M)</h2>
                 <a href="{{ path('question.indexByAge', {'ageCategory': 1}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
-        <div class="card bordered">
+        <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title">Enfant (3-14A)</h2>
                 <a href="{{ path('question.indexByAge', {'ageCategory': 2}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
-        <div class="card bordered">
+        <div class="card border-2 border-accent">
             <div class="card-body">
-                <h2 class="card-title">Compagnon scolaire (3-14A)</h2>
+                <h2 class="card-title whitespace-nowrap">Compagnon scolaire (3-14A)</h2>
                 <a href="{{ path('question.indexByAge', {'ageCategory': 3}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
-        <div class="card bordered">
+        <div class="card border-2 border-accent">
             <div class="card-body">
-                <h2 class="card-title">Adulte/Ado (11-65+ ans)</h2>
+                <h2 class="card-title whitespace-normal">Adulte/Ado (11-65+ ans)</h2>
                 <a href="{{ path('question.indexByAge', {'ageCategory': 4}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>

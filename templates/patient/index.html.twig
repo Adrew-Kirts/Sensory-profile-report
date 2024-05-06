@@ -38,7 +38,11 @@
                     <a class="btn btn-ghost btn-sm" href="{{ path('patient.edit', {slug: patient.slug, id: patient.id}) }}">Editer</a>
                 </td>
                 <td>
-                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post">
+{#                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post">#}
+{#                        <input type="hidden" name="_method" value="DELETE">#}
+{#                        <button type="submit" class="btn hover:btn-error btn-sm">Supprimer</button>#}
+{#                    </form>#}
+                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post" onsubmit="return confirmDelete()">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="btn hover:btn-error btn-sm">Supprimer</button>
                     </form>
@@ -51,4 +55,10 @@
         </table>
     <a href="{{ path('patient.create') }}" class="btn btn-secondary btn-sm">Nouveau patient</a>
 </div>
+
+    <script>
+        function confirmDelete() {
+            return confirm('Êtes-vous sûr de vouloir supprimer ce patient? Cette action est irréversible.');
+        }
+    </script>
 {% endblock %}

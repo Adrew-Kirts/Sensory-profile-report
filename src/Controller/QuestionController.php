@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Patient;
+use App\Entity\Question;
 use App\Entity\Survey;
 use App\Entity\SurveyAnswer;
 use App\Repository\PatientRepository;
@@ -40,8 +41,6 @@ class QuestionController extends AbstractController
     public function saveAnswers(Request $request, QuestionRepository $questionRepository, EntityManagerInterface $entityManager, int $ageCategory): Response
     {
         $answers = $request->request->all('answers');
-//        $allData = $request->request->all();
-//        $answers = $allData['answers'] ?? [];
 
         $patientId = $request->request->get('patientId');
 
@@ -61,8 +60,24 @@ class QuestionController extends AbstractController
         $entityManager->persist($survey);
         $entityManager->flush();
 
-        $this->addFlash('success', 'Answers have been saved successfully!');
+        $this->addFlash('success', 'Profil sensoriel bien enregistré');
         return $this->redirectToRoute('patient.index');
+    }
+
+    #[Route('/question/update/{answerId}', name: 'question.updateAnswer', methods: ['PATCH'])]
+    public function updateAnswer(Request $request, $answerId, EntityManagerInterface $entityManager): Response
+    {
+        $answer = $entityManager->getRepository(SurveyAnswer::class)->find($answerId);
+
+        if (!$answer) {
+            throw $this->createNotFoundException('No answer found for id '.$answerId);
+        }
+
+        $newAnswer = $request->request->get('newAnswer');
+        $answer->setAnswer($newAnswer);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('survey.show', ['id' => $answer->getSurvey()->getId()]);
     }
 
 }

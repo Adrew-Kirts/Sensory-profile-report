@@ -9,35 +9,158 @@
         <div>
             <strong>Questionnaire ID:</strong> {{ survey.id }}<br>
             <strong>Patient:</strong> {{ survey.patient.firstName }} {{ survey.patient.lastName }}<br>
-            <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }} (<strong>{{ survey.patient.age }}</strong>)<br>
-
+            <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }}
+            (<strong>{{ survey.patient.age }}</strong>)<br>
         </div>
 
+        <div class="divider"></div>
+
         <h2 class="text-xl font-bold my-4">Réponses</h2>
-        <table class="table table-compact w-full">
-            <thead>
-            <tr>
-                <th>#</th>
-                <th>Question</th>
-                <th>Answer</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for answer in answers %}
+        <div class="overflow-auto h-64">
+            <table class="table table-compact w-full">
+                <thead>
                 <tr>
-                    <td>{{ answer.id }}</td>
-                    <td>{{ answer.question.questionText }}</td>
-                    <td>{{ answer.answer }}</td>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Réponse</th>
                 </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                {% for answer in answers %}
+                    <tr>
+                        <td>{{ answer.question.questionNumber }}</td>
+                        <td>{{ answer.question.questionText }}</td>
+                        <td>
+                            <form action="{{ path('question.updateAnswer', {'answerId': answer.id}) }}" method="POST">
+                                <label>
+                                    <select name="newAnswer" class="select">
+                                        {% for i in 0..5 %}
+                                            <option value="{{ i }}" {% if answer.answer == i %}selected{% endif %}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-xs ml-2 hover:bg-accent">Sauvegarder</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+
+        <h2 class="text-xl font-bold my-6">Scores par section</h2>
+        <div class="overflow-auto">
+            <table class="table table-compact w-full">
+                <thead>
+                <tr class="bg-orange-400 text-white">
+                    <th>Section</th>
+                    <th>Score brut</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set generalScore = 0 %}
+                {% set auditfScore = 0 %}
+                {% set visualScore = 0 %}
+                {% set tactileScore = 0 %}
+                {% set mouvementScore = 0 %}
+                {% set sensoOralScore = 0 %}
+                {% for answer in answers %}
+                    {% if answer.question.questionNumber >= 1 and answer.question.questionNumber <= 8 %}
+                        {% set generalScore = generalScore + answer.answer %}
+                    {% elseif answer.question.questionNumber >= 9 and answer.question.questionNumber <= 12 %}
+                        {% set auditfScore = auditfScore + answer.answer %}
+                    {% elseif answer.question.questionNumber >= 13 and answer.question.questionNumber <= 16 %}
+                        {% set visualScore = visualScore + answer.answer %}
+                    {% elseif answer.question.questionNumber >= 17 and answer.question.questionNumber <= 19 %}
+                        {% set tactileScore = tactileScore + answer.answer %}
+                    {% elseif answer.question.questionNumber >= 20 and answer.question.questionNumber <= 23 %}
+                        {% set mouvementScore = mouvementScore + answer.answer %}
+                    {% elseif answer.question.questionNumber >= 24 and answer.question.questionNumber <= 25 %}
+                        {% set sensoOralScore = sensoOralScore + answer.answer %}
+                    {% endif %}
+                {% endfor %}
+                {% set totalScore = generalScore + auditfScore + visualScore + tactileScore + mouvementScore + sensoOralScore %}
+                <tr>
+                    <td>Traitement GÉNÉRAL de l'information</td>
+                    <td>{{ generalScore }}</td>
+                </tr>
+                <tr>
+                    <td>Traitement de l'information AUDITIVE</td>
+                    <td>{{ auditfScore }}</td>
+                </tr>
+                <tr>
+                    <td>Traitement de l'information VISUELLE</td>
+                    <td>{{ visualScore }}</td>
+                </tr>
+                <tr>
+                    <td>Traitement de l'information TACTILE</td>
+                    <td>{{ tactileScore }}</td>
+                </tr>
+                <tr>
+                    <td>Traitement de l'information du MOUVEMENT</td>
+                    <td>{{ mouvementScore }}</td>
+                </tr>
+                <tr>
+                    <td>Traitement de l'information SENSORIELLE ORALE</td>
+                    <td>{{ sensoOralScore }}</td>
+                </tr>
+                <tr>
+                    <td><strong>Score brut total</strong></td>
+                    <td>
+                        <strong>{{ totalScore }}</strong>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+
+        <h2 class="text-xl font-bold my-6">Score Total</h2>
+        <div class="overflow-auto">
+            <table class="table table-compact w-full">
+                <thead>
+                <tr class="bg-orange-400 text-white">
+                    <th></th>
+                    <th class="whitespace-normal min-w-24 text-xs">Score brut total</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Intervalle percentile</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Beaucoup moins que les autres</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Moins que les autres</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Comme la majorité des autres</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Plus que les autres</th>
+                    <th class="whitespace-normal min-w-24 text-xs">Beaucoup plus que les autres</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>Score total du nourrisson</td>
+                    <td>{{ totalScore }} / 125</td>
+                    <td></td>
+                    <td {% if totalScore <= 30 %}class="text-center font-bold"{% endif %}>0---30</td>
+                    <td {% if totalScore > 30 and totalScore <= 40 %}class="text-center font-bold"{% endif %}>31---40
+                    </td>
+                    <td {% if totalScore > 40 and totalScore <= 61 %}class="text-center font-bold"{% endif %}>41---61
+                    </td>
+                    <td {% if totalScore > 61 and totalScore <= 71 %}class="text-center font-bold"{% endif %}>62--71
+                    </td>
+                    <td {% if totalScore > 71 %}class="text-center font-bold"{% endif %}>72--125</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
     </div>
 
-    {{ survey.id  }} {{ survey.patient.firstName }} {{ survey.patient.lastName }}
+    {{ survey.id }} {{ survey.patient.firstName }} {{ survey.patient.lastName }}
 
     {{ dump(survey) }}
 
     {{ dump(answers) }}
 
 {% endblock %}
+

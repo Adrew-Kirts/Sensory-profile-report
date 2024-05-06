@@ -5,7 +5,7 @@
 {% block body %}
 
     <div class="flex flex-col text-center">
-        <a class="text-2xl">Questionnaire</a>
+        <a class="text-2xl">Profil sensoriel</a>
         {% set ageCategories = {
             0: 'nourrisson (0-6 mois)',
             1: 'jeune enfant (7-35 mois)',
@@ -18,13 +18,26 @@
 
     <form action="{{ path('question.saveAnswers', {'ageCategory': ageCategory}) }}" method="POST">
         <label>
-            <select class="select select-accent w-full max-w-xs" name="patientId">
-                <option disabled selected>Choisir patient</option>
+            <select class="select select-accent w-full max-w-xs mt-4" name="patientId" required>
+                <option disabled selected value="">Choisir patient</option>
                 {% for patient in patients %}
                     <option value="{{ patient.id }}">{{ patient.firstName }} {{ patient.lastName }}</option>
                 {% endfor %}
             </select>
         </label>
+
+        <div class="relative z-10">
+            <div class="border p-2 my-4 mx-auto max-w-4xl">
+                <div class="flex justify-between text-center text-xs sticky top-0 bg-white">
+                    <div>5: Presque toujours = 90% ou plus</div>
+                    <div class="border-l-2 border-gray-300 pl-2">4: Fréquemment = 75%</div>
+                    <div class="border-l-2 border-gray-300 pl-2">3: Moitié du temps = 50%</div>
+                    <div class="border-l-2 border-gray-300 pl-2">2: Parfois = 25%</div>
+                    <div class="border-l-2 border-gray-300 pl-2">1: Presque jamais = 10% ou moins</div>
+{#                    <div class="border-l-2 border-gray-300 pl-2">0: Ne s'applique pas</div>#}
+                </div>
+            </div>
+        </div>
 
         <div class="overflow-x-auto">
             <table class="table">
@@ -39,10 +52,10 @@
                 {% for question in questions %}
                     <tr class="hover:bg-accent">
                         <td>{{ question.questionNumber }}</td>
-                        <td>{{ question.questionText }}</td>
-                        <td class="flex flex-row justify-around">
+                        <td class="tooltip-info" data-tip="5: presque toujours, 4: fréquemment, 3: moitié du temps, 2: parfois, 1: presque jamais, 0: ne s'applique pas">{{ question.questionText }}</td>
+                        <td class="flex flex-row-reverse justify-around">
                             {% for i in 0..5 %}
-                                <div>
+                                <div class="text-center flex flex-col items-center px-1">
                                     <label for="answer{{ i }}_{{ question.id }}">{{ i }}</label>
                                     <input type="radio" id="answer{{ i }}_{{ question.id }}"
                                            name="answers[{{ question.id }}]"

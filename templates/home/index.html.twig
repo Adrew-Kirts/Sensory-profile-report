@@ -5,6 +5,10 @@
 {% block body %}
     {% block back_button %}{% endblock %}
 
+    <div class="flex justify-center mt-4 mb-16">
+        <img src="{{ asset('images/SPR-logo.png') }}" alt="SPR Logo" style="width: 200px;">
+    </div>
+
     <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
         {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
             <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
