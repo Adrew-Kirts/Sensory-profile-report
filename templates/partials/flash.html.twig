@@ -11,8 +11,14 @@
 {% endfor %}
 
 <script>
-    document.querySelectorAll('.alert button').forEach(function(button) {
-        button.addEventListener('click', function() {
+    document.querySelectorAll('.alert').forEach(function(alert) {
+        // Remove the alert after 3 seconds
+        setTimeout(function() {
+            alert.remove();
+        }, 3000);
+
+        // Remove the alert when the close button is clicked
+        alert.querySelector('button').addEventListener('click', function() {
             this.parentNode.remove();
         });
     });

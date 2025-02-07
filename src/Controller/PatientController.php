@@ -66,6 +66,7 @@ class PatientController extends AbstractController
             $entityManager->flush();
 
             $this->addFlash('success', 'Patient mis à jour');
+            return $this->redirectToRoute('patient.index');
         }
 
         return $this->render('patient/edit.html.twig', [

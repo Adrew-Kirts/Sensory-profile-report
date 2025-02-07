@@ -1,0 +1,284 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Survey{% endblock %}
+
+{% block body %}
+
+    <div class="mt-4">
+        <a href="{{ path('survey.export', {'id': survey.id}) }}" class="btn btn-xs btn-secondary">Exporter en PDF</a>
+    </div>
+
+    <div class="container mx-auto p-4">
+        <h1 class="text-2xl font-bold mb-4">Réponses questionnaire - jeune enfant</h1>
+        <div>
+            <strong>Patient:</strong> {{ survey.patient.firstName }} {{ survey.patient.lastName }}<br>
+            <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }}
+            (<strong>{{ survey.patient.age }}</strong>)<br>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 class="text-xl font-bold my-4">Réponses</h2>
+        <div class="overflow-auto h-64">
+            <table class="table table-compact w-full">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Question</th>
+                    <th>Réponse</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for answer in answers %}
+                    <tr>
+                        <td>{{ answer.question.questionNumber }}</td>
+                        <td>{{ answer.question.questionText }}</td>
+                        <td>
+                            <form action="{{ path('question.updateAnswer', {'answerId': answer.id}) }}" method="POST">
+                                <label>
+                                    <select name="newAnswer" class="select">
+                                        {% for i in 0..5 %}
+                                            <option value="{{ i }}" {% if answer.answer == i %}selected{% endif %}>{{ i }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </label>
+                                <input type="hidden" name="_method" value="PATCH">
+                                <button type="submit" class="btn btn-xs ml-1 hover:bg-accent">Sauvegarder</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="divider"></div>
+
+        <h2 class="text-xl font-bold my-6">Grille à quadrants</h2>
+        <div class="flex flex-wrap justify-between space-x-2">
+
+            {% set rechercheItems = [18, 19, 20, 32, 36, 37, 38] %}
+            {% set evitemItems = [3, 10, 27, 28, 29, 33, 35, 42, 49, 53, 54] %}
+            {% set sensibilityItems = [1, 2, 13, 16, 26, 31, 34, 39, 41, 44, 46, 48, 52] %}
+            {% set enregistrementItems = [9, 11, 12, 14, 15, 23, 24, 25, 30, 40, 45] %}
+
+            {% set quadrants = {
+                'Recherche': {'items': rechercheItems, 'color': 'orange-400'},
+                'Evitement': {'items': evitemItems, 'color': 'purple-400'},
+                'Sensibilité': {'items': sensibilityItems, 'color': 'green-400'},
+                'Enregistrement': {'items': enregistrementItems, 'color': 'pink-400'}
+            } %}
+
+            {% for quadrant, data in quadrants %}
+                <div class="w-1/5 min-w-fit mb-4">
+                    <table class="table table-compact w-full border">
+                        <thead>
+                        <tr class="bg-{{ data.color }} text-white text-center text-sm">
+                            <th colspan="2">{{ quadrant }}</th>
+                        </tr>
+                        </thead>
+                        <tr class="bg-{{ data.color }} text-sm">
+                            <th>Item</th>
+                            <th>Score brut</th>
+                        </tr>
+                        <tbody>
+                        {% set totalScore = 0 %}
+                        {% for item in data.items %}
+                            <tr>
+                                <td class="bg-{{ data.color }} text-center text-xs">{{ item }}</td>
+                                <td class="text-xs text-center">
+                                    {% set score = answers[item - 1].answer %}
+                                    {{ score }}
+                                    {% set totalScore = totalScore + score %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="font-bold">
+                            <td class="bg-{{ data.color }} text-center">Total</td>
+                            <td class="text-center">{{ totalScore }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            {% endfor %}
+
+        </div>
+    </div>
+
+    <h2 class="text-xl font-bold my-6">Résultats du sommaire</h2>
+    <div class="overflow-auto">
+        <table class="table table-compact w-full">
+            <thead>
+            <tr class="bg-orange-400 text-white">
+                <th></th>
+                <th class="whitespace-normal min-w-24 text-xs">Score brut total</th>
+                <th class="whitespace-normal min-w-24 text-xs">Intervalle percentile</th>
+                <th class="whitespace-normal min-w-24 text-xs">Beaucoup moins que les autres</th>
+                <th class="whitespace-normal min-w-24 text-xs">Moins que les autres</th>
+                <th class="whitespace-normal min-w-24 text-xs">Comme la majorité des autres</th>
+                <th class="whitespace-normal min-w-24 text-xs">Plus que les autres</th>
+                <th class="whitespace-normal min-w-24 text-xs">Beaucoup plus que les autres</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% set totalRecherche = 0 %}
+            {% set totalEvitement = 0 %}
+            {% set totalSensibilite = 0 %}
+            {% set totalEnregistrement = 0 %}
+
+            {% for answer in answers %}
+                {% if answer.question.questionNumber in [18, 19, 20, 32, 36, 37, 38] %}
+                    {% set totalRecherche = totalRecherche + answer.answer %}
+                {% elseif answer.question.questionNumber in [3, 10, 27, 28, 29, 33, 35, 42, 49, 53, 54] %}
+                    {% set totalEvitement = totalEvitement + answer.answer %}
+                {% elseif answer.question.questionNumber in [1, 2, 13, 16, 26, 31, 34, 39, 41, 44, 46, 48, 52] %}
+                    {% set totalSensibilite = totalSensibilite + answer.answer %}
+                {% elseif answer.question.questionNumber in [9, 11, 12, 14, 15, 23, 24, 25, 30, 40, 45] %}
+                    {% set totalEnregistrement = totalEnregistrement + answer.answer %}
+                {% endif %}
+            {% endfor %}
+
+            <tr>
+                <td>Recherche</td>
+                <td>{{ totalRecherche }} / 35</td>
+                <td class="text-center"></td>
+                <td class="text-center {% if totalRecherche <= 17 %}font-bold{% endif %}">0 -- 17</td>
+                <td class="text-center {% if totalRecherche > 17 and totalRecherche <= 22 %}font-bold{% endif %}">18 -- 22</td>
+                <td class="text-center {% if totalRecherche > 22 and totalRecherche <= 33 %}font-bold{% endif %}">23 -- 33</td>
+                <td class="text-center {% if totalRecherche > 33 and totalRecherche <= 35 %}font-bold{% endif %}">34 -- 35</td>
+                <td class="text-center {% if totalRecherche > 35 %}font-bold{% endif %}">**</td>
+            </tr>
+            <tr>
+                <td>Evitement</td>
+                <td>{{ totalEvitement }} / 55</td>
+                <td></td>
+                <td class="text-center {% if totalEvitement <= 5 %}font-bold{% endif %}">0 -- 5</td>
+                <td class="text-center {% if totalEvitement > 5 and totalEvitement <= 10 %}font-bold{% endif %}">6 -- 10</td>
+                <td class="text-center {% if totalEvitement > 10 and totalEvitement <= 21 %}font-bold{% endif %}">11 -- 21</td>
+                <td class="text-center {% if totalEvitement > 21 and totalEvitement <= 26 %}font-bold{% endif %}">22 -- 26</td>
+                <td class="text-center {% if totalEvitement > 26 %}font-bold{% endif %}">27 -- 55</td>
+            </tr>
+            <tr>
+                <td>Sensibilité</td>
+                <td>{{ totalSensibilite }} / 65</td>
+                <td></td>
+                <td class="text-center {% if totalSensibilite <= 6 %}font-bold{% endif %}">0 -- 6</td>
+                <td class="text-center {% if totalSensibilite > 6 and totalSensibilite <= 12 %}font-bold{% endif %}">7 -- 12</td>
+                <td class="text-center {% if totalSensibilite > 12 and totalSensibilite <= 27 %}font-bold{% endif %}">13 -- 27</td>
+                <td class="text-center {% if totalSensibilite > 27 and totalSensibilite <= 34 %}font-bold{% endif %}">28 -- 34</td>
+                <td class="text-center {% if totalSensibilite > 34 %}font-bold{% endif %}">35 -- 65</td>
+            </tr>
+            <tr>
+                <td>Enregistrement</td>
+                <td>{{ totalEnregistrement }} / 55</td>
+                <td></td>
+                <td class="text-center {% if totalEnregistrement <= 3 %}font-bold{% endif %}">0 -- 3</td>
+                <td class="text-center {% if totalEnregistrement > 3 and totalEnregistrement <= 9 %}font-bold{% endif %}">4 -- 9</td>
+                <td class="text-center {% if totalEnregistrement > 9 and totalEnregistrement <= 21 %}font-bold{% endif %}">10 -- 21</td>
+                <td class="text-center {% if totalEnregistrement > 21 and totalEnregistrement <= 26 %}font-bold{% endif %}">22 -- 26</td>
+                <td class="text-center {% if totalEnregistrement > 26 %}font-bold{% endif %}">27 -- 55</td>
+            </tr>
+
+            <tr><td colspan="8" class="border-t-2"></td></tr>
+
+            {% set totalGeneral = 0 %}
+            {% set totalAuditif = 0 %}
+            {% set totalVisuel = 0 %}
+            {% set totalTactile = 0 %}
+            {% set totalMouvement = 0 %}
+            {% set totalOral = 0 %}
+            {% set totalComportemental = 0 %}
+
+            {% for answer in answers %}
+                {% if answer.question.questionNumber in 1..10 %}
+                    {% set totalGeneral = totalGeneral + answer.answer %}
+                {% elseif answer.question.questionNumber in 11..17 %}
+                    {% set totalAuditif = totalAuditif + answer.answer %}
+                {% elseif answer.question.questionNumber in 18..23 %}
+                    {% set totalVisuel = totalVisuel + answer.answer %}
+                {% elseif answer.question.questionNumber in 26..31 %}
+                    {% set totalTactile = totalTactile + answer.answer %}
+                {% elseif answer.question.questionNumber in 36..40 %}
+                    {% set totalMouvement = totalMouvement + answer.answer %}
+                {% elseif answer.question.questionNumber in 42..48 %}
+                    {% set totalOral = totalOral + answer.answer %}
+                {% elseif answer.question.questionNumber in 49..54 %}
+                    {% set totalComportemental = totalComportemental + answer.answer %}
+                {% endif %}
+            {% endfor %}
+
+            <tr>
+                <td>Général</td>
+                <td>{{ totalGeneral }} / 50</td>
+                <td></td>
+                <td class="text-center {% if totalGeneral <= 5 %}font-bold{% endif %}">0 -- 5</td>
+                <td class="text-center {% if totalGeneral > 5 and totalGeneral <= 10 %}font-bold{% endif %}">6 -- 10</td>
+                <td class="text-center {% if totalGeneral > 10 and totalGeneral <= 22 %}font-bold{% endif %}">11 -- 22</td>
+                <td class="text-center {% if totalGeneral > 22 and totalGeneral <= 27 %}font-bold{% endif %}">23 -- 27</td>
+                <td class="text-center {% if totalGeneral > 27 %}font-bold{% endif %}">28 -- 50</td>
+            </tr>
+            <tr>
+                <td>Auditif</td>
+                <td>{{ totalAuditif }} / 35</td>
+                <td></td>
+                <td class="text-center {% if totalAuditif <= 2 %}font-bold{% endif %}">0 -- 2</td>
+                <td class="text-center {% if totalAuditif > 2 and totalAuditif <= 5 %}font-bold{% endif %}">3 -- 5</td>
+                <td class="text-center {% if totalAuditif > 5 and totalAuditif <= 14 %}font-bold{% endif %}">6 -- 14</td>
+                <td class="text-center {% if totalAuditif > 14 and totalAuditif <= 17 %}font-bold{% endif %}">15 -- 17</td>
+                <td class="text-center {% if totalAuditif > 17 %}font-bold{% endif %}">18 -- 35</td>
+            </tr>
+            <tr>
+                <td>Visuel</td>
+                <td>{{ totalVisuel }} / 30</td>
+                <td></td>
+                <td class="text-center {% if totalVisuel <= 5 %}font-bold{% endif %}">0 -- 5</td>
+                <td class="text-center {% if totalVisuel > 5 and totalVisuel <= 10 %}font-bold{% endif %}">6 -- 10</td>
+                <td class="text-center {% if totalVisuel > 10 and totalVisuel <= 19 %}font-bold{% endif %}">11 -- 19</td>
+                <td class="text-center {% if totalVisuel > 19 and totalVisuel <= 24 %}font-bold{% endif %}">20 -- 24</td>
+                <td class="text-center {% if totalVisuel > 24 %}font-bold{% endif %}">25 -- 30</td>
+            </tr>
+            <tr>
+                <td>Tactile</td>
+                <td>{{ totalTactile }} / 30</td>
+                <td></td>
+                <td class="text-center {% if totalTactile <= 1 %}font-bold{% endif %}">0 -- 1</td>
+                <td class="text-center {% if totalTactile > 1 and totalTactile <= 5 %}font-bold{% endif %}">2 -- 5</td>
+                <td class="text-center {% if totalTactile > 5 and totalTactile <= 13 %}font-bold{% endif %}">6 -- 13</td>
+                <td class="text-center {% if totalTactile > 13 and totalTactile <= 16 %}font-bold{% endif %}">14 -- 16</td>
+                <td class="text-center {% if totalTactile > 16 %}font-bold{% endif %}">17 -- 30</td>
+            </tr>
+            <tr>
+                <td>Mouvement</td>
+                <td>{{ totalMouvement }} / 25</td>
+                <td></td>
+                <td class="text-center {% if totalMouvement <= 9 %}font-bold{% endif %}">0 -- 9</td>
+                <td class="text-center {% if totalMouvement > 9 and totalMouvement <= 12 %}font-bold{% endif %}">10 -- 12</td>
+                <td class="text-center {% if totalMouvement > 12 and totalMouvement <= 20 %}font-bold{% endif %}">13 -- 20</td>
+                <td class="text-center {% if totalMouvement > 20 and totalMouvement <= 23 %}font-bold{% endif %}">21 -- 23</td>
+                <td class="text-center {% if totalMouvement > 23 %}font-bold{% endif %}">24 -- 25</td>
+            </tr>
+            <tr>
+                <td>Oral</td>
+                <td>{{ totalOral }} / 35</td>
+                <td></td>
+                <td class="text-center {% if totalOral <= 1 %}font-bold{% endif %}">0 -- 1</td>
+                <td class="text-center {% if totalOral > 1 and totalOral <= 5 %}font-bold{% endif %}">2 -- 5</td>
+                <td class="text-center {% if totalOral > 5 and totalOral <= 15 %}font-bold{% endif %}">6 -- 15</td>
+                <td class="text-center {% if totalOral > 15 and totalOral <= 19 %}font-bold{% endif %}">16 -- 19</td>
+                <td class="text-center {% if totalOral > 19 %}font-bold{% endif %}">20 -- 35</td>
+            </tr>
+            <tr>
+                <td>Comportemental</td>
+                <td>{{ totalComportemental }} / 30</td>
+                <td></td>
+                <td class="text-center {% if totalComportemental <= 3 %}font-bold{% endif %}">0 -- 3</td>
+                <td class="text-center {% if totalComportemental > 3 and totalComportemental <= 6 %}font-bold{% endif %}">4 -- 6</td>
+                <td class="text-center {% if totalComportemental > 6 and totalComportemental <= 14 %}font-bold{% endif %}">7 -- 14</td>
+                <td class="text-center {% if totalComportemental > 14 and totalComportemental <= 17 %}font-bold{% endif %}">15 -- 17</td>
+                <td class="text-center {% if totalComportemental > 17 %}font-bold{% endif %}">18 -- 30</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}

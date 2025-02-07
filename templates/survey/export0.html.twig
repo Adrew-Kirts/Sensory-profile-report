@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .table th, .table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+        .table th {
+            background-color: #f2f2f2;
+        }
+        .divider {
+            margin: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+        .bg-orange-400 {
+            background-color: #f6ad55;
+        }
+        .text-white {
+            color: #fff;
+        }
+        .text-center {
+            text-align: center;
+        }
+        .font-bold {
+            font-weight: bold;
+        }
+        .whitespace-normal {
+            white-space: normal;
+        }
+        .min-w-24 {
+            min-width: 6rem;
+        }
+        .text-xs {
+            font-size: 0.75rem;
+        }
+        .overflow-auto {
+            overflow: auto;
+        }
+        .text-xl {
+            font-size: 1.25rem;
+        }
+        .my-6 {
+            margin-top: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .table-compact th, .table-compact td {
+            padding: 4px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Réponses questionnaire</h1>
+    <div>
+        <strong>Patient:</strong> {{ survey.patient.firstName }} {{ survey.patient.lastName }}<br>
+        <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }}
+        (<strong>{{ survey.patient.age }}</strong>)<br>
+    </div>
+
+    <div class="divider"></div>
+
+    <h2>Réponses</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Question</th>
+            <th>Réponse</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for answer in answers %}
+            <tr>
+                <td>{{ answer.question.questionNumber }}</td>
+                <td>{{ answer.question.questionText }}</td>
+                <td>{{ answer.answer }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <h2>Scores par section</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Section</th>
+            <th>Score brut</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set generalScore = 0 %}
+        {% set auditfScore = 0 %}
+        {% set visualScore = 0 %}
+        {% set tactileScore = 0 %}
+        {% set mouvementScore = 0 %}
+        {% set sensoOralScore = 0 %}
+        {% for answer in answers %}
+            {% if answer.question.questionNumber >= 1 and answer.question.questionNumber <= 8 %}
+                {% set generalScore = generalScore + answer.answer %}
+            {% elseif answer.question.questionNumber >= 9 and answer.question.questionNumber <= 12 %}
+                {% set auditfScore = auditfScore + answer.answer %}
+            {% elseif answer.question.questionNumber >= 13 and answer.question.questionNumber <= 16 %}
+                {% set visualScore = visualScore + answer.answer %}
+            {% elseif answer.question.questionNumber >= 17 and answer.question.questionNumber <= 19 %}
+                {% set tactileScore = tactileScore + answer.answer %}
+            {% elseif answer.question.questionNumber >= 20 and answer.question.questionNumber <= 23 %}
+                {% set mouvementScore = mouvementScore + answer.answer %}
+            {% elseif answer.question.questionNumber >= 24 and answer.question.questionNumber <= 25 %}
+                {% set sensoOralScore = sensoOralScore + answer.answer %}
+            {% endif %}
+        {% endfor %}
+        {% set totalScore = generalScore + auditfScore + visualScore + tactileScore + mouvementScore + sensoOralScore %}
+        <tr>
+            <td>Traitement GÉNÉRAL de l'information</td>
+            <td>{{ generalScore }}</td>
+        </tr>
+        <tr>
+            <td>Traitement de l'information AUDITIVE</td>
+            <td>{{ auditfScore }}</td>
+        </tr>
+        <tr>
+            <td>Traitement de l'information VISUELLE</td>
+            <td>{{ visualScore }}</td>
+        </tr>
+        <tr>
+            <td>Traitement de l'information TACTILE</td>
+            <td>{{ tactileScore }}</td>
+        </tr>
+        <tr>
+            <td>Traitement de l'information du MOUVEMENT</td>
+            <td>{{ mouvementScore }}</td>
+        </tr>
+        <tr>
+            <td>Traitement de l'information SENSORIELLE ORALE</td>
+            <td>{{ sensoOralScore }}</td>
+        </tr>
+        <tr>
+            <td><strong>Score brut total</strong></td>
+            <td><strong>{{ totalScore }}</strong></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="divider"></div>
+
+    <h2 class="text-xl font-bold my-6">Score Total</h2>
+    <div class="overflow-auto">
+        <table class="table table-compact w-full">
+            <thead>
+            <tr class="bg-orange-400">
+                <th>Score total du nourrisson</th>
+                <th>Score</th>
+                <th>0---30</th>
+                <th>31---40</th>
+                <th>41---61</th>
+                <th>62--71</th>
+                <th>72--125</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td></td>
+                <td class="text-center">{{ totalScore }} / 125</td>
+                <td {% if totalScore <= 30 %}class="text-center font-bold"{% endif %}>{% if totalScore <= 30 %}X{% endif %}</td>
+                <td {% if totalScore > 30 and totalScore <= 40 %}class="text-center font-bold"{% endif %}>{% if totalScore > 30 and totalScore <= 40 %}X{% endif %}</td>
+                <td {% if totalScore > 40 and totalScore <= 61 %}class="text-center font-bold"{% endif %}>{% if totalScore > 40 and totalScore <= 61 %}X{% endif %}</td>
+                <td {% if totalScore > 61 and totalScore <= 71 %}class="text-center font-bold"{% endif %}>{% if totalScore > 61 and totalScore <= 71 %}X{% endif %}</td>
+                <td {% if totalScore > 71 %}class="text-center font-bold"{% endif %}>{% if totalScore > 71 %}X{% endif %}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>

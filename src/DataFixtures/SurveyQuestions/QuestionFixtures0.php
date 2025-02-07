@@ -83,7 +83,7 @@ class QuestionFixtures0 extends Fixture
             ],
             [
                 'questionNumber' => 18,
-                'questionText' => "doi être emmitouflé ou enveloppé pour se détendre",
+                'questionText' => "doit être emmitouflé ou enveloppé pour se détendre",
             ],
             [
                 'questionNumber' => 19,
@@ -91,7 +91,7 @@ class QuestionFixtures0 extends Fixture
             ],
             [
                 'questionNumber' => 20,
-                'questionText' => " aime les activités rythmiques (par exemple, se balancer, se bercer, se promener en auto)",
+                'questionText' => "aime les activités rythmiques (par exemple, se balancer, se bercer, se promener en auto)",
             ],
             [
                 'questionNumber' => 21,

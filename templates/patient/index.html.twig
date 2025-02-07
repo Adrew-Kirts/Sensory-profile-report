@@ -1,19 +1,24 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello PatientController!{% endblock %}
+{% block title %}Liste des patients{% endblock %}
 
 {% block body %}
 <style>
 
+
 </style>
 
 <div class="overflow-x-auto">
+{#    // center h1 and h2:#}
+    <div class="text-center">
+        <h1 class="text-2xl font-bold mb-3">Liste des patients</h1>
+        <h2 class="text-lg font-bold mb-3">Cliquez sur un patient pour voir ses évaluations</h2>
+    </div>
     <table class="table w-max">
             <thead>
             <tr>
                 <th>Prénom</th>
                 <th>Nom de famille</th>
-                <th>Slug</th>
                 <th>Créé le</th>
                 <th>Actions</th>
             </tr>
@@ -29,19 +34,12 @@
                     <a href="{{ path('patient.show', {slug: patient.slug, id: patient.id}) }}">{{ patient.LastName }}</a>
                 </td>
                 <td>
-                    <a class="text-green-400">{{ patient.slug }}</a>
-                </td>
-                <td>
                     <a>{{ patient.createdAt | date('d-m-y') }}</a>
                 </td>
                 <td>
                     <a class="btn btn-ghost btn-sm" href="{{ path('patient.edit', {slug: patient.slug, id: patient.id}) }}">Editer</a>
                 </td>
                 <td>
-{#                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post">#}
-{#                        <input type="hidden" name="_method" value="DELETE">#}
-{#                        <button type="submit" class="btn hover:btn-error btn-sm">Supprimer</button>#}
-{#                    </form>#}
                     <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post" onsubmit="return confirmDelete()">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="btn hover:btn-error btn-sm">Supprimer</button>
