@@ -52,11 +52,10 @@ class SurveyController extends AbstractController
         $ageCategory = $questions->first()->getAgeCategory();
 
         $template = match ($ageCategory) {
-            // TODO : add other age categories
             0 => 'survey/export0.html.twig',
             1 => 'survey/export1.html.twig',
             2 => 'survey/export2.html.twig',
-            3 => 'survey/show3.html.twig',
+            3 => 'survey/export3.html.twig',
         };
 
         $html = $this->renderView($template, [

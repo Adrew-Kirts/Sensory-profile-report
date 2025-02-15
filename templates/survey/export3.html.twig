@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .patient-info {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .divider {
+            margin: 20px 0;
+            border-bottom: 1px solid #ddd;
+            clear: both;
+        }
+
+        /* Fix for quadrants layout */
+        .quadrants-grid {
+            width: 100%;
+            display: table;
+            table-layout: fixed;
+        }
+
+        .quadrant-box {
+            display: table-cell;
+            width: 25%;
+            padding: 5px;
+        }
+
+        .quadrant-box table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table {
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        .text-center { text-align: center; }
+        .font-bold { font-weight: bold; }
+        .text-sm { font-size: 0.875rem; }
+        .text-xs { font-size: 0.75rem; }
+
+        .quadrant-header {
+            padding: 8px;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            background-color: #60a5fa;
+        }
+
+        /* Summary table styles */
+        .summary-table {
+            width: 100%;
+        }
+
+        .summary-table th {
+            background-color: #f97316;
+            color: white;
+            text-align: center;
+            padding: 6px 4px;
+            white-space: normal;
+            vertical-align: middle;
+            font-size: 0.75rem;  /* Same as text-xs */
+
+        }
+
+        .summary-table td {
+            padding: 4px;
+            text-align: center;
+            font-size: 0.75rem;  /* Same as text-xs */
+        }
+    </style>
+</head>
+<body>
+{# Define all variables first #}
+{% set recordingItems = [3, 6, 12, 15, 21, 23, 36, 37, 39, 41, 44, 45, 52, 55, 59] %}
+{% set researchItems = [2, 4, 8, 10, 14, 17, 19, 28, 30, 32, 40, 42, 47, 50, 58] %}
+{% set sensibilityItems = [7, 9, 13, 16, 20, 22, 25, 27, 31, 33, 34, 48, 51, 54, 60] %}
+{% set avoidanceItems = [1, 5, 11, 18, 24, 26, 29, 35, 38, 43, 46, 49, 53, 56, 57] %}
+
+{% set quadrants = {
+    'Enregistrement faible': {'items': recordingItems, 'color': 'blue-400'},
+    'Recherche sensorielle': {'items': researchItems, 'color': 'blue-400'},
+    'Sensibilité sensorielle': {'items': sensibilityItems, 'color': 'blue-400'},
+    'Evitement des sensations': {'items': avoidanceItems, 'color': 'blue-400'}
+} %}
+
+{# Calculate total scores #}
+{% set totalScore1 = 0 %}
+{% set totalScore2 = 0 %}
+{% set totalScore3 = 0 %}
+{% set totalScore4 = 0 %}
+
+{% for item in recordingItems %}
+    {% set totalScore1 = totalScore1 + answers[item - 1].answer %}
+{% endfor %}
+
+{% for item in researchItems %}
+    {% set totalScore2 = totalScore2 + answers[item - 1].answer %}
+{% endfor %}
+
+{% for item in sensibilityItems %}
+    {% set totalScore3 = totalScore3 + answers[item - 1].answer %}
+{% endfor %}
+
+{% for item in avoidanceItems %}
+    {% set totalScore4 = totalScore4 + answers[item - 1].answer %}
+{% endfor %}
+
+{# Define ranges based on age #}
+{% set ranges_11_17 = {
+    'Enregistrement faible': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 26},
+            {'min': 27, 'max': 40},
+            {'min': 41, 'max': 51},
+            {'min': 52, 'max': 75}
+        ]
+    },
+    'Recherche sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 27},
+            {'min': 28, 'max': 41},
+            {'min': 42, 'max': 58},
+            {'min': 59, 'max': 65},
+            {'min': 66, 'max': 75}
+        ]
+    },
+    'Sensibilité sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 19},
+            {'min': 20, 'max': 25},
+            {'min': 26, 'max': 40},
+            {'min': 41, 'max': 48},
+            {'min': 49, 'max': 75}
+        ]
+    },
+    'Evitement des sensations': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 25},
+            {'min': 26, 'max': 40},
+            {'min': 41, 'max': 48},
+            {'min': 49, 'max': 75}
+        ]
+    }
+} %}
+
+{% set ranges_18_64 = {
+    'Enregistrement faible': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 23},
+            {'min': 24, 'max': 35},
+            {'min': 36, 'max': 44},
+            {'min': 45, 'max': 75}
+        ]
+    },
+    'Recherche sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 35},
+            {'min': 36, 'max': 42},
+            {'min': 43, 'max': 56},
+            {'min': 57, 'max': 62},
+            {'min': 63, 'max': 75}
+        ]
+    },
+    'Sensibilité sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 25},
+            {'min': 26, 'max': 41},
+            {'min': 42, 'max': 48},
+            {'min': 49, 'max': 75}
+        ]
+    },
+    'Evitement des sensations': {
+        'ranges': [
+            {'min': 15, 'max': 19},
+            {'min': 20, 'max': 26},
+            {'min': 27, 'max': 41},
+            {'min': 42, 'max': 49},
+            {'min': 50, 'max': 75}
+        ]
+    }
+} %}
+
+{% set ranges_65_plus = {
+    'Enregistrement faible': {
+        'ranges': [
+            {'min': 15, 'max': 19},
+            {'min': 20, 'max': 26},
+            {'min': 27, 'max': 40},
+            {'min': 41, 'max': 51},
+            {'min': 52, 'max': 75}
+        ]
+    },
+    'Recherche sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 28},
+            {'min': 29, 'max': 39},
+            {'min': 40, 'max': 52},
+            {'min': 53, 'max': 63},
+            {'min': 64, 'max': 75}
+        ]
+    },
+    'Sensibilité sensorielle': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 25},
+            {'min': 26, 'max': 41},
+            {'min': 42, 'max': 48},
+            {'min': 49, 'max': 75}
+        ]
+    },
+    'Evitement des sensations': {
+        'ranges': [
+            {'min': 15, 'max': 18},
+            {'min': 19, 'max': 25},
+            {'min': 26, 'max': 42},
+            {'min': 43, 'max': 49},
+            {'min': 50, 'max': 75}
+        ]
+    }
+} %}
+
+{% set selected_ranges = ranges_11_17 %}
+{% if survey.patient.age >= 65 %}
+    {% set selected_ranges = ranges_65_plus %}
+{% elseif survey.patient.age >= 18 %}
+    {% set selected_ranges = ranges_18_64 %}
+{% endif %}
+
+{% set quadrantScores = {
+    'Enregistrement faible': {
+        'score': totalScore1,
+        'ranges': selected_ranges['Enregistrement faible'].ranges
+    },
+    'Recherche sensorielle': {
+        'score': totalScore2,
+        'ranges': selected_ranges['Recherche sensorielle'].ranges
+    },
+    'Sensibilité sensorielle': {
+        'score': totalScore3,
+        'ranges': selected_ranges['Sensibilité sensorielle'].ranges
+    },
+    'Evitement des sensations': {
+        'score': totalScore4,
+        'ranges': selected_ranges['Evitement des sensations'].ranges
+    }
+} %}
+
+<div class="header">
+    <h1>Réponses questionnaire - 11 à 65+</h1>
+    <div class="patient-info">
+        <strong>Patient:</strong> {{ survey.patient.firstName }} {{ survey.patient.lastName }}<br>
+        <strong>Date de naissance:</strong> {{ survey.patient.birthdate | date('d-m-y') }}
+        (<strong>{{ survey.patient.age }}</strong>)<br>
+        <strong>Date du rapport:</strong> {{ "now"|date('d-m-Y') }}
+    </div>
+</div>
+
+<div class="criteria-info">
+    Critères utilisés:
+    {% if survey.patient.age >= 65 %}
+        65 ans et plus
+    {% elseif survey.patient.age >= 18 %}
+        18 à 64 ans
+    {% else %}
+        11 à 17 ans
+    {% endif %}
+</div>
+
+<h2>Grille à quadrants</h2>
+<div class="quadrants-grid">
+    {% for quadrant, data in quadrants %}
+        <div class="quadrant-box">
+            <table>
+                <thead>
+                <tr>
+                    <th colspan="2" class="quadrant-header bg-blue">{{ quadrant }}</th>
+                </tr>
+                <tr>
+                    <th class="text-center">Item</th>
+                    <th class="text-center">Score brut</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% set totalScore = 0 %}
+                {% for item in data.items %}
+                    <tr>
+                        <td class="text-center text-sm">{{ item }}</td>
+                        <td class="text-center text-sm">
+                            {% set score = answers[item - 1].answer %}
+                            {{ score }}
+                            {% set totalScore = totalScore + score %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                <tr class="font-bold">
+                    <td class="text-center">Total</td>
+                    <td class="text-center">{{ totalScore }}</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+</div>
+
+<h2>Résultats du sommaire</h2>
+<table class="summary-table">
+    <thead>
+    <tr>
+        <th>Quadrant</th>
+        <th>Score brut total</th>
+        <th>Nettement inférieur</th>
+        <th>Inférieur</th>
+        <th>Semblable</th>
+        <th>Supérieur</th>
+        <th>Nettement supérieur</th>
+    </tr>
+    <tr class="text-center">
+        <th></th>
+        <th></th>
+        <th>--</th>
+        <th>-</th>
+        <th>=</th>
+        <th>+</th>
+        <th>++</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for quadrant, data in quadrantScores %}
+        <tr>
+            <td>{{ quadrant }}</td>
+            <td class="text-center">{{ data.score }} / 75</td>
+            {% for range in data.ranges %}
+                <td class="text-center {% if data.score >= range.min and data.score <= range.max %}font-bold{% endif %}">
+                    {{ range.min }} -- {{ range.max }}
+                </td>
+            {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+<div style="text-align: center; margin-top: 40px; font-size: 0.8rem; color: #666;">
+    Document généré le {{ "now"|date('d/m/Y à H:i') }}
+</div>
+</body>
+</html>

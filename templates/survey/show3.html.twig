@@ -106,164 +106,220 @@
 
     <div class="divider"></div>
 
+    {% set totalScore1 = 0 %}
+    {% set totalScore2 = 0 %}
+    {% set totalScore3 = 0 %}
+    {% set totalScore4 = 0 %}
+
+    {% for item in recordingItems %}
+        {% set totalScore1 = totalScore1 + answers[item - 1].answer %}
+    {% endfor %}
+
+    {% for item in researchItems %}
+        {% set totalScore2 = totalScore2 + answers[item - 1].answer %}
+    {% endfor %}
+
+    {% for item in sensibilityItems %}
+        {% set totalScore3 = totalScore3 + answers[item - 1].answer %}
+    {% endfor %}
+
+    {% for item in avoidanceItems %}
+        {% set totalScore4 = totalScore4 + answers[item - 1].answer %}
+    {% endfor %}
+
     <h2 class="text-xl font-bold my-6">Résultats du sommaire</h2>
     <div class="overflow-auto">
         <table class="table table-compact w-full">
             <thead>
-            <tr class="bg-orange-400 text-white">
-                <th>Section</th>
-                <th>Score brut total</th>
-                <th>Intervalle percentile</th>
-                <th>Beaucoup moins que les autres</th>
-                <th>Moins que les autres</th>
-                <th>Comme la majorité des autres</th>
-                <th>Plus que les autres</th>
-                <th>Beaucoup plus que les autres</th>
+            <tr class="bg-orange-400 text-white text-xs sm:text-sm">
+                <th class="whitespace-normal w-28 md:w-32 lg:w-36">Quadrant</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Score brut total</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Nettement inférieur à la plupart des gens</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Inférieur à la plupart des gens</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Semblable à la plupart des gens</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Supérieur à la plupart des gens</th>
+                <th class="whitespace-normal w-24 md:w-28 lg:w-32">Nettement supérieur à la plupart des gens</th>
+            </tr>
+            <tr class="text-xl text-center">
+                <th></th>
+                <th></th>
+                <th>--</th>
+                <th>-</th>
+                <th>=</th>
+                <th>+</th>
+                <th>++</th>
             </tr>
             </thead>
             <tbody>
-            {% set totalAuditive = 0 %}
-            {% set totalVisuelle = 0 %}
-            {% set totalTactile = 0 %}
-            {% set totalMouvement = 0 %}
-            {% set totalPositionCorps = 0 %}
-            {% set totalSensorielleOrale = 0 %}
-            {% set totalConduite = 0 %}
-            {% set totalSocioEmotionnel = 0 %}
-            {% set totalAttentionnel = 0 %}
+            {% set ranges_11_17 = {
+                'Enregistrement faible': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 26},
+                        {'min': 27, 'max': 40},
+                        {'min': 41, 'max': 51},
+                        {'min': 52, 'max': 75}
+                    ]
+                },
+                'Recherche sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 27},
+                        {'min': 28, 'max': 41},
+                        {'min': 42, 'max': 58},
+                        {'min': 59, 'max': 65},
+                        {'min': 66, 'max': 75}
+                    ]
+                },
+                'Sensibilité sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 19},
+                        {'min': 20, 'max': 25},
+                        {'min': 26, 'max': 40},
+                        {'min': 41, 'max': 48},
+                        {'min': 49, 'max': 75}
+                    ]
+                },
+                'Evitement des sensations': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 25},
+                        {'min': 26, 'max': 40},
+                        {'min': 41, 'max': 48},
+                        {'min': 49, 'max': 75}
+                    ]
+                }
+            } %}
 
-            {% for answer in answers %}
-                {% if answer.question.questionNumber in 1..8 %}
-                    {% set totalAuditive = totalAuditive + answer.answer %}
-                {% elseif answer.question.questionNumber in 9..14 %}
-                    {% set totalVisuelle = totalVisuelle + answer.answer %}
-                {% elseif answer.question.questionNumber in 16..26 %}
-                    {% set totalTactile = totalTactile + answer.answer %}
-                {% elseif answer.question.questionNumber in 27..34 %}
-                    {% set totalMouvement = totalMouvement + answer.answer %}
-                {% elseif answer.question.questionNumber in 35..42 %}
-                    {% set totalPositionCorps = totalPositionCorps + answer.answer %}
-                {% elseif answer.question.questionNumber in 43..52 %}
-                    {% set totalSensorielleOrale = totalSensorielleOrale + answer.answer %}
-                {% elseif answer.question.questionNumber in 53..61 %}
-                    {% set totalConduite = totalConduite + answer.answer %}
-                {% elseif answer.question.questionNumber in 62..75 %}
-                    {% set totalSocioEmotionnel = totalSocioEmotionnel + answer.answer %}
-                {% elseif answer.question.questionNumber in 76..85 %}
-                    {% set totalAttentionnel = totalAttentionnel + answer.answer %}
-                {% endif %}
+            {% set ranges_18_64 = {
+                'Enregistrement faible': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 23},
+                        {'min': 24, 'max': 35},
+                        {'min': 36, 'max': 44},
+                        {'min': 45, 'max': 75}
+                    ]
+                },
+                'Recherche sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 35},
+                        {'min': 36, 'max': 42},
+                        {'min': 43, 'max': 56},
+                        {'min': 57, 'max': 62},
+                        {'min': 63, 'max': 75}
+                    ]
+                },
+                'Sensibilité sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 25},
+                        {'min': 26, 'max': 41},
+                        {'min': 42, 'max': 48},
+                        {'min': 49, 'max': 75}
+                    ]
+                },
+                'Evitement des sensations': {
+                    'ranges': [
+                        {'min': 15, 'max': 19},
+                        {'min': 20, 'max': 26},
+                        {'min': 27, 'max': 41},
+                        {'min': 42, 'max': 49},
+                        {'min': 50, 'max': 75}
+                    ]
+                }
+            } %}
+
+            {% set ranges_65_plus = {
+                'Enregistrement faible': {
+                    'ranges': [
+                        {'min': 15, 'max': 19},
+                        {'min': 20, 'max': 26},
+                        {'min': 27, 'max': 40},
+                        {'min': 41, 'max': 51},
+                        {'min': 52, 'max': 75}
+                    ]
+                },
+                'Recherche sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 28},
+                        {'min': 29, 'max': 39},
+                        {'min': 40, 'max': 52},
+                        {'min': 53, 'max': 63},
+                        {'min': 64, 'max': 75}
+                    ]
+                },
+                'Sensibilité sensorielle': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 25},
+                        {'min': 26, 'max': 41},
+                        {'min': 42, 'max': 48},
+                        {'min': 49, 'max': 75}
+                    ]
+                },
+                'Evitement des sensations': {
+                    'ranges': [
+                        {'min': 15, 'max': 18},
+                        {'min': 19, 'max': 25},
+                        {'min': 26, 'max': 42},
+                        {'min': 43, 'max': 49},
+                        {'min': 50, 'max': 75}
+                    ]
+                }
+            } %}
+
+            {% set patient_age = survey.patient.age %}
+            {% set selected_ranges = ranges_11_17 %}
+
+            {% if patient_age >= 65 %}
+                {% set selected_ranges = ranges_65_plus %}
+            {% elseif patient_age >= 18 %}
+                {% set selected_ranges = ranges_18_64 %}
+            {% endif %}
+
+            {% set quadrantScores = {
+                'Enregistrement faible': {
+                    'score': totalScore1,
+                    'ranges': selected_ranges['Enregistrement faible'].ranges
+                },
+                'Recherche sensorielle': {
+                    'score': totalScore2,
+                    'ranges': selected_ranges['Recherche sensorielle'].ranges
+                },
+                'Sensibilité sensorielle': {
+                    'score': totalScore3,
+                    'ranges': selected_ranges['Sensibilité sensorielle'].ranges
+                },
+                'Evitement des sensations': {
+                    'score': totalScore4,
+                    'ranges': selected_ranges['Evitement des sensations'].ranges
+                }
+            } %}
+
+            {% for quadrant, data in quadrantScores %}
+                <tr>
+                    <td>{{ quadrant }}</td>
+                    <td>{{ data.score }} / 75</td>
+                    {% for range in data.ranges %}
+                        <td class="text-center {% if data.score >= range.min and data.score <= range.max %}font-bold{% endif %}">
+                            {{ range.min }} -- {{ range.max }}
+                        </td>
+                    {% endfor %}
+                </tr>
             {% endfor %}
-
-            <!-- Sections with Score Ranges -->
-            <!-- Auditive -->
-            <tr>
-                <td>Auditif</td>
-                <td>{{ totalAuditive }} / 40</td>
-                <td></td>
-                <td class="text-center {% if totalAuditive <= 2 %}font-bold{% endif %}">0 -- 2</td>
-                <td class="text-center {% if totalAuditive > 2 and totalAuditive <= 9 %}font-bold{% endif %}">3 -- 9</td>
-                <td class="text-center {% if totalAuditive > 9 and totalAuditive <= 24 %}font-bold{% endif %}">10 -- 24</td>
-                <td class="text-center {% if totalAuditive > 24 and totalAuditive <= 30 %}font-bold{% endif %}">25 -- 30</td>
-                <td class="text-center {% if totalAuditive > 30 %}font-bold{% endif %}">31 -- 40</td>
-            </tr>
-
-            <!-- Visuelle -->
-            <tr>
-                <td>Visuelle</td>
-                <td>{{ totalVisuelle }} / 30</td>
-                <td></td>
-                <td class="text-center {% if totalVisuelle <= 4 %}font-bold{% endif %}">0 -- 4</td>
-                <td class="text-center {% if totalVisuelle > 4 and totalVisuelle <= 8 %}font-bold{% endif %}">5 -- 8</td>
-                <td class="text-center {% if totalVisuelle > 8 and totalVisuelle <= 17 %}font-bold{% endif %}">9 -- 17</td>
-                <td class="text-center {% if totalVisuelle > 17 and totalVisuelle <= 21 %}font-bold{% endif %}">18 -- 21</td>
-                <td class="text-center {% if totalVisuelle > 21 %}font-bold{% endif %}">22 -- 30</td>
-            </tr>
-
-            <!-- Tactile -->
-            <tr>
-                <td>Tactile</td>
-                <td>{{ totalTactile }} / 55</td>
-                <td></td>
-                <td class="text-center {% if totalTactile <= 1 %}font-bold{% endif %}">0 -- 1</td>
-                <td class="text-center {% if totalTactile > 1 and totalTactile <= 8 %}font-bold{% endif %}">2 -- 8</td>
-                <td class="text-center {% if totalTactile > 8 and totalTactile <= 23 %}font-bold{% endif %}">9 -- 23</td>
-                <td class="text-center {% if totalTactile > 23 and totalTactile <= 31 %}font-bold{% endif %}">24 -- 31</td>
-                <td class="text-center {% if totalTactile > 31 %}font-bold{% endif %}">32 -- 55</td>
-            </tr>
-
-            <!-- Mouvement -->
-            <tr>
-                <td>Mouvement</td>
-                <td>{{ totalMouvement }} / 40</td>
-                <td></td>
-                <td class="text-center {% if totalMouvement <= 1 %}font-bold{% endif %}">0 -- 1</td>
-                <td class="text-center {% if totalMouvement > 1 and totalMouvement <= 6 %}font-bold{% endif %}">2 -- 6</td>
-                <td class="text-center {% if totalMouvement > 6 and totalMouvement <= 18 %}font-bold{% endif %}">7 -- 18</td>
-                <td class="text-center {% if totalMouvement > 18 and totalMouvement <= 23 %}font-bold{% endif %}">19 -- 23</td>
-                <td class="text-center {% if totalMouvement > 23 %}font-bold{% endif %}">24 -- 40</td>
-            </tr>
-
-            <!-- Position du corps -->
-            <tr>
-                <td>Position du corps</td>
-                <td>{{ totalPositionCorps }} / 40</td>
-                <td></td>
-                <td class="text-center {% if totalPositionCorps == 0 %}font-bold{% endif %}">0</td>
-                <td class="text-center {% if totalPositionCorps > 0 and totalPositionCorps <= 4 %}font-bold{% endif %}">1 -- 4</td>
-                <td class="text-center {% if totalPositionCorps > 4 and totalPositionCorps <= 15 %}font-bold{% endif %}">5 -- 15</td>
-                <td class="text-center {% if totalPositionCorps > 15 and totalPositionCorps <= 18 %}font-bold{% endif %}">16 -- 18</td>
-                <td class="text-center {% if totalPositionCorps > 18 %}font-bold{% endif %}">19 -- 40</td>
-            </tr>
-
-            <!-- Sensorielle orale -->
-            <tr>
-                <td>Oral</td>
-                <td>{{ totalSensorielleOrale }} / 50</td>
-                <td></td>
-                <td class="text-center {% if totalSensorielleOrale <= 1 %}font-bold{% endif %}">0 -- 1</td>
-                <td class="text-center {% if totalSensorielleOrale > 1 and totalSensorielleOrale <= 5 %}font-bold{% endif %}">2 -- 5</td>
-                <td class="text-center {% if totalSensorielleOrale > 5 and totalSensorielleOrale <= 15 %}font-bold{% endif %}">6 -- 15</td>
-                <td class="text-center {% if totalSensorielleOrale > 15 and totalSensorielleOrale <= 19 %}font-bold{% endif %}">16 -- 19</td>
-                <td class="text-center {% if totalSensorielleOrale > 19 %}font-bold{% endif %}">20 -- 50</td>
-            </tr>
-
-            <!-- Conduite -->
-            <tr>
-                <td>Conduite</td>
-                <td>{{ totalConduite }} / 45</td>
-                <td></td>
-                <td class="text-center {% if totalConduite <= 3 %}font-bold{% endif %}">0 -- 3</td>
-                <td class="text-center {% if totalConduite > 3 and totalConduite <= 6 %}font-bold{% endif %}">4 -- 6</td>
-                <td class="text-center {% if totalConduite > 6 and totalConduite <= 14 %}font-bold{% endif %}">7 -- 14</td>
-                <td class="text-center {% if totalConduite > 14 and totalConduite <= 17 %}font-bold{% endif %}">15 -- 17</td>
-                <td class="text-center {% if totalConduite > 17 %}font-bold{% endif %}">18 -- 45</td>
-            </tr>
-
-            <!-- Socio-émotionnel -->
-            <tr>
-                <td>Socio-émotionnel</td>
-                <td>{{ totalSocioEmotionnel }} / 70</td>
-                <td></td>
-                <td class="text-center {% if totalSocioEmotionnel <= 2 %}font-bold{% endif %}">0 -- 2</td>
-                <td class="text-center {% if totalSocioEmotionnel > 2 and totalSocioEmotionnel <= 13 %}font-bold{% endif %}">3 -- 13</td>
-                <td class="text-center {% if totalSocioEmotionnel > 13 and totalSocioEmotionnel <= 34 %}font-bold{% endif %}">14 -- 34</td>
-                <td class="text-center {% if totalSocioEmotionnel > 34 and totalSocioEmotionnel <= 41 %}font-bold{% endif %}">35 -- 41</td>
-                <td class="text-center {% if totalSocioEmotionnel > 41 %}font-bold{% endif %}">42 -- 70</td>
-            </tr>
-
-            <!-- Attentionnel -->
-            <tr>
-                <td>Attentionnel</td>
-                <td>{{ totalAttentionnel }} / 50</td>
-                <td></td>
-                <td class="text-center {% if totalAttentionnel == 0 %}font-bold{% endif %}">0</td>
-                <td class="text-center {% if totalAttentionnel > 0 and totalAttentionnel <= 8 %}font-bold{% endif %}">1 -- 8</td>
-                <td class="text-center {% if totalAttentionnel > 8 and totalAttentionnel <= 24 %}font-bold{% endif %}">9 -- 24</td>
-                <td class="text-center {% if totalAttentionnel > 24 and totalAttentionnel <= 31 %}font-bold{% endif %}">25 -- 31</td>
-                <td class="text-center {% if totalAttentionnel > 31 %}font-bold{% endif %}">32 -- 50</td>
-            </tr>
             </tbody>
         </table>
+    </div>
+
+    <div class="text-sm text-gray-600 mt-4">
+        Critères utilisés:
+        {% if patient_age >= 65 %}
+            65 ans et plus
+        {% elseif patient_age >= 18 %}
+            18 à 64 ans
+        {% else %}
+            11 à 17 ans
+        {% endif %}
     </div>
 
     {% endblock %}

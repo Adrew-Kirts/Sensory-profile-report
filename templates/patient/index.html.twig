@@ -3,18 +3,18 @@
 {% block title %}Liste des patients{% endblock %}
 
 {% block body %}
-<style>
+    <style>
 
 
-</style>
+    </style>
 
-<div class="overflow-x-auto">
-{#    // center h1 and h2:#}
-    <div class="text-center">
-        <h1 class="text-2xl font-bold mb-3">Liste des patients</h1>
-        <h2 class="text-lg font-bold mb-3">Cliquez sur un patient pour voir ses évaluations</h2>
-    </div>
-    <table class="table w-max">
+    <div class="overflow-x-auto">
+        {#    // center h1 and h2: #}
+        <div class="text-center">
+            <h1 class="text-2xl font-bold mb-3">Liste des patients</h1>
+            <h2 class="text-lg font-bold mb-3">Cliquez sur un patient pour voir ses évaluations</h2>
+        </div>
+        <table class="table w-max">
             <thead>
             <tr>
                 <th>Prénom</th>
@@ -26,7 +26,7 @@
             <tbody>
             {% for patient in patients %}
             </tbody>
-            <tr>
+            <tr class="hover">
                 <td>
                     <a href="{{ path('patient.show', {slug: patient.slug, id: patient.id}) }}">{{ patient.FirstName }}</a>
                 </td>
@@ -37,22 +37,24 @@
                     <a>{{ patient.createdAt | date('d-m-y') }}</a>
                 </td>
                 <td>
-                    <a class="btn btn-ghost btn-sm" href="{{ path('patient.edit', {slug: patient.slug, id: patient.id}) }}">Editer</a>
+                    <a class="btn btn-ghost btn-sm"
+                       href="{{ path('patient.edit', {slug: patient.slug, id: patient.id}) }}">Editer</a>
                 </td>
                 <td>
-                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post" onsubmit="return confirmDelete()">
+                    <form action="{{ path('patient.delete', {slug: patient.slug, id: patient.id}) }}" method="post"
+                          onsubmit="return confirmDelete()">
                         <input type="hidden" name="_method" value="DELETE">
                         <button type="submit" class="btn hover:btn-error btn-sm">Supprimer</button>
                     </form>
                 </td>
-{#                <td>#}
-{#                    <a href="{{ path('survey.new', {patient_id: patient.id}) }}" class="btn btn-accent btn-sm">Evaluation</a>#}
-{#                </td>#}
+                {#                <td> #}
+                {#                    <a href="{{ path('survey.new', {patient_id: patient.id}) }}" class="btn btn-accent btn-sm">Evaluation</a> #}
+                {#                </td> #}
             </tr>
             {% endfor %}
         </table>
-    <a href="{{ path('patient.create') }}" class="btn btn-secondary btn-sm">Nouveau patient</a>
-</div>
+        <a href="{{ path('patient.create') }}" class="btn btn-secondary btn-sm">Nouveau patient</a>
+    </div>
 
     <script>
         function confirmDelete() {
