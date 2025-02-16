@@ -1,7 +1,17 @@
 spr.strikwerda.fr {
-    reverse_proxy app:9000
-    tls {
-        protocols tls1.2 tls1.3
+    root * /var/www/public
+    php_fastcgi app:9000
+    file_server
+    encode gzip
+
+    # Add basic security headers
+    header {
+        # Enable HSTS
+        Strict-Transport-Security "max-age=31536000; includeSubDomains"
+        # Disable clients from sniffing the media type
+        X-Content-Type-Options "nosniff"
+        # Keep referrer data off of HTTP connections
+        Referrer-Policy "strict-origin-when-cross-origin"
     }
 }
 
