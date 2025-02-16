@@ -15,7 +15,7 @@ class QuestionFixtures2 extends Fixture
         $questions = [
             [
                 'questionNumber' => 1,
-                'questionText' => "réagit fortement aux bruits soudains  ou intens (par exemple, sirènes, chien qui aboie, séchoir à cheveux)",
+                'questionText' => "réagit fortement aux bruits soudains  ou intenses (par exemple, sirènes, chien qui aboie, séchoir à cheveux)",
             ],
             [
                 'questionNumber' => 2,
@@ -31,7 +31,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 5,
-                'questionText' => "ne peut pas travailler avec un bruit de fond (par exemple, ventilateur, refrigerateur)",
+                'questionText' => "ne peut pas travailler avec un bruit de fond (par exemple, ventilateur, réfrigérateur)",
             ],
             [
                 'questionNumber' => 6,
@@ -43,7 +43,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 8,
-                'questionText' => "aime des bruits étranger ou fait du(des) bruit(s) par plaisir",
+                'questionText' => "aime des bruits étranges ou fait du(des) bruit(s) par plaisir",
             ],
             [
                 'questionNumber' => 9,
@@ -63,7 +63,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 13,
-                'questionText' => "est plus dérangé par des lumière fortes que d'autres enfants du même âge",
+                'questionText' => "est plus dérangé par des lumières fortes que d'autres enfants du même âge",
             ],
             [
                 'questionNumber' => 14,
@@ -71,7 +71,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 15,
-                'questionText' => 'est dérangé par les lumière fortes (par exemple, se cache de la lumière du soleil traversant la fenêtre de la voiture)',
+                'questionText' => 'est dérangé par les lumières fortes (par exemple, se cache de la lumière du soleil traversant la fenêtre de la voiture)',
             ],
             [
                 'questionNumber' => 16,
@@ -83,7 +83,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 18,
-                'questionText' => "réagit de façon émotionnelle ou aggressive au toucher",
+                'questionText' => "réagit de façon émotionnelle ou agressive au toucher",
             ],
             [
                 'questionNumber' => 19,
@@ -195,11 +195,11 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 46,
-                'questionText' => "se limite à certainse textures d'aliments",
+                'questionText' => "se limite à certaines textures d'aliments",
             ],
             [
                 'questionNumber' => 47,
-                'questionText' => "est un mangeur sélectif, particulièrement en ce a trait à la texture des aliments",
+                'questionText' => "est un mangeur sélectif, particulièrement en ce qui a trait à la texture des aliments",
             ],
             [
                 'questionNumber' => 48,
@@ -243,15 +243,15 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 58,
-                'questionText' => "apeut être têtu et peu coopératif",
+                'questionText' => "peut être têtu et peu coopératif",
             ],
             [
                 'questionNumber' => 59,
-                'questionText' => "rfait des crises de colère",
+                'questionText' => "fait des crises de colère",
             ],
             [
                 'questionNumber' => 60,
-                'questionText' => "semble prendre plqisir à tomber",
+                'questionText' => "semble prendre plaisir à tomber",
             ],
             [
                 'questionNumber' => 61,
@@ -299,7 +299,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 72,
-                'questionText' => "est boulversé par des changements dans ses plans, routines ou attentes",
+                'questionText' => "est bouleversé par des changements dans ses plans, routines ou attentes",
             ],
             [
                 'questionNumber' => 73,
@@ -323,7 +323,7 @@ class QuestionFixtures2 extends Fixture
             ],
             [
                 'questionNumber' => 78,
-                'questionText' => "pdétourne son regqrd de ses tâches pour regarder tout ce qui se passe dans la pièce",
+                'questionText' => "détourne son regqrd de ses tâches pour regarder tout ce qui se passe dans la pièce",
             ],
             [
                 'questionNumber' => 79,

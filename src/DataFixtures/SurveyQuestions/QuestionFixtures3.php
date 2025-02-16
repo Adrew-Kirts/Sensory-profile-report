@@ -22,7 +22,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 3,
-                'questionText' => "Je ne sens pas les odeurs  que les autre personnes disent sentir",
+                'questionText' => "Je ne sens pas les odeurs que les autre personnes disent sentir",
             ],
             [
                 'questionNumber' => 4,
@@ -34,7 +34,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 6,
-                'questionText' => "De nombreux aliments me semblent fades (c,-à-d., la nourriture n'a pas beaucoup de saqveur ou n'a pas de goût)",
+                'questionText' => "De nombreux aliments me semblent fades (c,-à-d., la nourriture n'a pas beaucoup de saveur ou n'a pas de goût)",
             ],
             [
                 'questionNumber' => 7,
@@ -58,7 +58,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 12,
-                'questionText' => "JJe trébuche ou je me cogne contre des objets",
+                'questionText' => "Je trébuche ou je me cogne contre des objets",
             ],
             [
                 'questionNumber' => 13,
@@ -66,7 +66,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 14,
-                'questionText' => "Je choisis de pratiquer des activités physisiques",
+                'questionText' => "Je choisis de pratiquer des activités physiques",
             ],
             [
                 'questionNumber' => 15,
@@ -94,7 +94,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 21,
-                'questionText' => "Je ne remarque pas les pancartes indiquant les rues, les édifices ou les salles lorsque je me rends à un nouvel qendroit",
+                'questionText' => "Je ne remarque pas les pancartes indiquant les rues, les édifices ou les salles lorsque je me rends à un nouvel endroit",
             ],
             [
                 'questionNumber' => 22,
@@ -106,7 +106,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 24,
-                'questionText' => "Je choisis de magasiner dans les petits magasins car je suis incorfortable dans les grands magasins",
+                'questionText' => "Je choisis de magasiner dans les petits magasins car je suis inconfortable dans les grands magasins",
             ],
             [
                 'questionNumber' => 25,
@@ -142,11 +142,11 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 33,
-                'questionText' => "Je ne suis pas à l'aise à porter vertaines étoffes (p. ex., la laine, la soie, le velours côtelé, les étiquettes de vêtements)",
+                'questionText' => "Je ne suis pas à l'aise à porter certaines étoffes (p. ex., la laine, la soie, le velours côtelé, les étiquettes de vêtements)",
             ],
             [
                 'questionNumber' => 34,
-                'questionText' => "Je n'aime pas certaines textures d'aliments (p. ex., la pelure des pêches, la compote de pomme, le fromage cottage, le beure d'arachide croquant)",
+                'questionText' => "Je n'aime pas certaines textures d'aliments (p. ex., la pelure des pêches, la compote de pomme, le fromage cottage, le beurre d'arachide croquant)",
             ],
             [
                 'questionNumber' => 35,
@@ -198,7 +198,7 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 47,
-                'questionText' => "Je trouve des activités ou je présente devant les autres (p. ex., musique, théâtre, dart oratoire et répondre aux questions en classe)",
+                'questionText' => "Je trouve des activités ou je présente devant les autres (p. ex., musique, théâtre, d'art oratoire et répondre aux questions en classe)",
             ],
             [
                 'questionNumber' => 48,
@@ -210,15 +210,15 @@ class QuestionFixtures3 extends Fixture
             ],
             [
                 'questionNumber' => 50,
-                'questionText' => "Je fredonne, sifflz, chante ou fais d'autres bruits",
+                'questionText' => "Je fredonne, siffle, chante ou fais d'autres bruits",
             ],
             [
                 'questionNumber' => 51,
-                'questionText' => "Je sursaute facilement quand j'entends des bruits soudains ou intense (p. ex., un aspirateur, un chien qui aboie, un téléphone qui sonne)",
+                'questionText' => "Je sursaute facilement quand j'entends des bruits soudains ou intenses (p. ex., un aspirateur, un chien qui aboie, un téléphone qui sonne)",
             ],
             [
                 'questionNumber' => 52,
-                'questionText' => "J'ai de la difficulté à suivre ce que disent les gens quand ils parlent vite ou à propos de sujets qui ne me sonts pas familiers",
+                'questionText' => "J'ai de la difficulté à suivre ce que disent les gens quand ils parlent vite ou à propos de sujets qui ne me sont pas familiers",
             ],
             [
                 'questionNumber' => 53,

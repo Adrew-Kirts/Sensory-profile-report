@@ -16,22 +16,4 @@ class HomeController extends AbstractController
     function index(Request $request): Response {
         return $this->render('home/index.html.twig');
     }
-
-    #[Route("/newuser", name: "new.user")]
-    function newUser(Request $request, EntityManagerInterface $entityManager): Response {
-        $date = new \DateTimeImmutable('now');
-        $user = new User();
-        $user->setEmail('john@doe.com')
-            ->setFirstName('John')
-            ->setLastName('Doe')
-            ->setUsername('user')
-            ->setPassword('password')
-            ->setSlug('slug')
-            ->setCreatedAt($date)
-            ->setRoles([]);
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-        return $this->render('home/index.html.twig');
-    }
 }

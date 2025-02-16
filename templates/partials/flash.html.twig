@@ -1,7 +1,13 @@
 {% for type, messages in app.flashes %}
+    {% set alertClass = {
+        'error': 'bg-red-100 text-red-900 border-red-500',
+        'success': 'bg-green-100 text-green-900 border-green-500',
+        'warning': 'bg-yellow-100 text-yellow-900 border-yellow-500',
+        'info': 'bg-blue-100 text-blue-900 border-blue-500'
+    }[type]|default('bg-blue-100 text-blue-900 border-blue-500') %}
 
-    <div role="alert" class="alert alert-{{ type }} w-max m-4">
-        <button type="button" class="btn btn-accent btn-sm">
+    <div role="alert" class="alert flex items-center gap-2 p-4 rounded-md border {{ alertClass }} w-max m-4">
+        <button type="button" class="p-1 hover:opacity-70 font-bold text-lg" aria-label="Close">
             x
         </button>
         <span>
@@ -12,12 +18,10 @@
 
 <script>
     document.querySelectorAll('.alert').forEach(function(alert) {
-        // Remove the alert after 3 seconds
         setTimeout(function() {
             alert.remove();
-        }, 3000);
+        }, 4000);
 
-        // Remove the alert when the close button is clicked
         alert.querySelector('button').addEventListener('click', function() {
             this.parentNode.remove();
         });

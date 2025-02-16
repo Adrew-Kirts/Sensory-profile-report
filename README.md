@@ -58,6 +58,15 @@ Load fixtures `php bin/console doctrine:fixtures:load`
 
 Or only load specific fixtures: `php bin/console doctrine:fixtures:load --fixtures=src/DataFixtures/SurveyQuestions/`
 
+Create Admin command
+1. Connect to your server
+2. Navigate to your project directory
+3. Run the command:
+```
+php bin/console app:create-admin
+```
+4. Follow the instructions to create a new admin user
+
 ## Technologies Used
 - Symfony: PHP framework for backend development
 - Tailwind CSS: Utility-first CSS framework for styling

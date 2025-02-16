@@ -75,7 +75,7 @@ class QuestionFixtures1 extends Fixture
             ],
             [
                 'questionNumber' => 16,
-                'questionText' => "devient boulversé ou essaie de se retirer de milieux bruyants",
+                'questionText' => "devient bouleversé ou essaie de se retirer de milieux bruyants",
             ],
             [
                 'questionNumber' => 17,
@@ -127,7 +127,7 @@ class QuestionFixtures1 extends Fixture
             ],
             [
                 'questionNumber' => 29,
-                'questionText' => "évite d'être en contqct qvec des surfaces rugueuses, froides ou collants (par exemple, tapis, comptoirs) ",
+                'questionText' => "évite d'être en contact qvec des surfaces rugueuses, froides ou collants (par exemple, tapis, comptoirs) ",
             ],
             [
                 'questionNumber' => 30,
@@ -147,7 +147,7 @@ class QuestionFixtures1 extends Fixture
             ],
             [
                 'questionNumber' => 34,
-                'questionText' => "devient anxieux quand il marche ou rampe sur certaines surfces (par exemple, gazon, sable, tapis, carreaux de céramique)",
+                'questionText' => "devient anxieux quand il marche ou rampe sur certaines surfaces (par exemple, gazon, sable, tapis, carreaux de céramique)",
             ],
             [
                 'questionNumber' => 35,
@@ -227,7 +227,7 @@ class QuestionFixtures1 extends Fixture
             ],
             [
                 'questionNumber' => 54,
-                'questionText' => "devient tellement boulversé dans les nouveaux milieux/environnements qu'il est difficile de le calmer",
+                'questionText' => "devient tellement bouleversé dans les nouveaux milieux/environnements qu'il est difficile de le calmer",
             ],
         ];
 

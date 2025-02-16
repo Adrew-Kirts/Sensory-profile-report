@@ -59,6 +59,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255)]
     private ?string $email = null;
 
+    #[ORM\OneToOne(targetEntity: RegistrationCode::class)]
+    private ?RegistrationCode $registrationCode = null;
+
     public function __construct()
     {
         $this->surveys = new ArrayCollection();
@@ -251,4 +254,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->username;
     }
 
+    public function getRegistrationCode(): ?RegistrationCode
+    {
+        return $this->registrationCode;
+    }
+
+    public function setRegistrationCode(?RegistrationCode $registrationCode): static
+    {
+        $this->registrationCode = $registrationCode;
+
+        return $this;
+    }
 }

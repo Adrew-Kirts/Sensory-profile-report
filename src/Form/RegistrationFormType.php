@@ -8,6 +8,7 @@ use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,6 +33,15 @@ class RegistrationFormType extends AbstractType
                 ],
             ])
             ->add('email')
+            ->add('registrationCode', TextType::class, [
+                'label' => 'Registration Code',
+                'mapped' => false,
+                'constraints' => [
+                    new NotBlank([
+                        'message' => 'Veuillez entrer un code de registration.',
+                    ]),
+                ],
+            ])
             ->add('username')
             ->add('firstName')
             ->add('lastName')

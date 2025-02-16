@@ -87,7 +87,7 @@ class QuestionFixtures0 extends Fixture
             ],
             [
                 'questionNumber' => 19,
-                'questionText' => "est dérangé par des differences de textures (par exemple, sur le gazon, sur le tapis, sur les couvertures)",
+                'questionText' => "est dérangé par des différences de textures (par exemple, sur le gazon, sur le tapis, sur les couvertures)",
             ],
             [
                 'questionNumber' => 20,
