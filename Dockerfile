@@ -22,17 +22,28 @@ RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Create system user to run Composer and Symfony Commands
+RUN useradd -G www-data,root -u 1000 -d /home/symfony symfony
+RUN mkdir -p /home/symfony/.composer && \
+    chown -R symfony:symfony /home/symfony
+
 # Set working directory
 WORKDIR /var/www
 
 # Copy existing application directory
 COPY . /var/www
 
+# Set permissions
+RUN chown -R symfony:symfony /var/www
+
+# Switch to non-root user
+USER symfony
+
 # Install dependencies
 RUN composer install --no-interaction --optimize-autoloader --no-dev
 
-# Set permissions
-RUN chown -R www-data:www-data /var/www
+# Switch back to root for FPM
+USER root
 
 EXPOSE 9000
 CMD ["php-fpm"]
