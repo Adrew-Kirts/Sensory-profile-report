@@ -39,14 +39,19 @@ services:
       - "8080:80"
       - "8443:443"
     volumes:
+    volumes:
       - type: bind
         source: /opt/spr_project
         target: /var/www
       - type: bind
         source: /opt/spr_project/Caddyfile
         target: /etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
+      - type: bind
+        source: /opt/spr_project/caddy/data
+        target: /data
+      - type: bind
+        source: /opt/spr_project/caddy/config
+        target: /config
     networks:
       - spr_network
 
