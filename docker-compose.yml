@@ -36,8 +36,10 @@ services:
     restart: unless-stopped
     user: "1001:1001"
     ports:
-      - "8080:80"
-      - "8443:443"
+      - "80:80"      # Required for HTTPS validation
+      - "443:443"    # Required for HTTPS validation
+      - "8080:8080"  # Your app
+      - "8443:8443"  # Your portainer
     volumes:
       - type: bind
         source: /opt/spr_project

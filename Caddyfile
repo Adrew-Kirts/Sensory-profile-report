@@ -1,4 +1,20 @@
-spr.strikwerda.fr:8080 {    # Added :8080 here
+{
+    # Global options
+    admin off
+    auto_https disable_redirects  # Disable redirects while testing
+    # email your.email@domain.com  # Optional: your email for urgent notices
+}
+
+spr.strikwerda.fr {
+    tls {
+        issuer acme
+    }
+
+    # Listen on both standard and custom ports
+    bind :80
+    bind :443
+    bind :8080
+
     root * /var/www/public
     php_fastcgi app:9000
     file_server
@@ -11,9 +27,14 @@ spr.strikwerda.fr:8080 {    # Added :8080 here
     }
 }
 
-portainer.spr.strikwerda.fr:8443 {    # Added :8443 here
-    reverse_proxy portainer:9000
+portainer.spr.strikwerda.fr {
     tls {
-        protocols tls1.2 tls1.3
+        issuer acme
     }
+
+    bind :80
+    bind :443
+    bind :8443
+
+    reverse_proxy portainer:9000
 }
