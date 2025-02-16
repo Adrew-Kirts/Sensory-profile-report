@@ -7,11 +7,12 @@ services:
       dockerfile: Dockerfile
     container_name: spr_app
     restart: unless-stopped
-    user: "1001:1001"  # Updated to match your actual UID:GID
+    user: "1001:1001"
     volumes:
       - type: bind
-        source: .
+        source: /opt/spr_project
         target: /var/www
+    working_dir: /var/www
     networks:
       - spr_network
 
@@ -33,17 +34,17 @@ services:
     image: caddy:2
     container_name: spr_caddy
     restart: unless-stopped
-    user: "1001:1001"  # Updated to match your actual UID:GID
+    user: "1001:1001"
     ports:
       - "8080:80"
       - "8443:443"
     volumes:
       - type: bind
-        source: ./Caddyfile
-        target: /etc/caddy/Caddyfile
-      - type: bind
-        source: .
+        source: /opt/spr_project
         target: /var/www
+      - type: bind
+        source: /opt/spr_project/Caddyfile
+        target: /etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     networks:
