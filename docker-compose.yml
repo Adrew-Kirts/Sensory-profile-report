@@ -21,10 +21,10 @@ services:
     container_name: spr_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: ${DB_DATABASE}
-      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
-      MYSQL_PASSWORD: ${DB_PASSWORD}
-      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: spr_db
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_PASSWORD: dbpassword
+      MYSQL_USER: dbuser
     volumes:
       - spr_dbdata:/var/lib/mysql
     networks:
@@ -74,8 +74,4 @@ networks:
 
 volumes:
   spr_dbdata:
-  caddy_data:
-    driver: local
-  caddy_config:
-    driver: local
   portainer_data:
