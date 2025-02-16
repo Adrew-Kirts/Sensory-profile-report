@@ -39,7 +39,6 @@ services:
       - "8080:80"
       - "8443:443"
     volumes:
-    volumes:
       - type: bind
         source: /opt/spr_project
         target: /var/www
