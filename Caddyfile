@@ -1,0 +1,13 @@
+spr.strikwerda.fr {
+    reverse_proxy app:9000
+    tls {
+        protocols tls1.2 tls1.3
+    }
+}
+
+portainer.spr.strikwerda.fr {
+    reverse_proxy portainer:9000
+    tls {
+        protocols tls1.2 tls1.3
+    }
+}

@@ -30,6 +30,9 @@ npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
 
-.env
-
 .idea/
+
+.env
+.env.local
+.env.*
+!.env.example
