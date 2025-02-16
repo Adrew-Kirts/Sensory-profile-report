@@ -13,6 +13,8 @@ services:
         source: /opt/spr_project
         target: /var/www
     working_dir: /var/www
+    ports:
+      - "127.0.0.1:9000:9000"  # Expose PHP-FPM locally
     networks:
       - spr_network
 
@@ -30,32 +32,6 @@ services:
     networks:
       - spr_network
 
-  caddy:
-    image: caddy:2
-    container_name: spr_caddy
-    restart: unless-stopped
-    user: "1001:1001"
-    ports:
-      - "80:80"      # Required for HTTPS validation
-      - "443:443"    # Required for HTTPS validation
-      - "8080:8080"  # Your app
-      - "8443:8443"  # Your portainer
-    volumes:
-      - type: bind
-        source: /opt/spr_project
-        target: /var/www
-      - type: bind
-        source: /opt/spr_project/Caddyfile
-        target: /etc/caddy/Caddyfile
-      - type: bind
-        source: /opt/spr_project/caddy/data
-        target: /data
-      - type: bind
-        source: /opt/spr_project/caddy/config
-        target: /config
-    networks:
-      - spr_network
-
   portainer:
     image: portainer/portainer-ce:latest
     container_name: spr_portainer
@@ -66,7 +42,7 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer_data:/data
     ports:
-      - "9000:9000"
+      - "127.0.0.1:9000:9000"  # Only expose locally
     networks:
       - spr_network
 
