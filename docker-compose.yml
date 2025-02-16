@@ -7,9 +7,11 @@ services:
       dockerfile: Dockerfile
     container_name: spr_app
     restart: unless-stopped
-    working_dir: /var/www
+    user: "1001:1001"  # Updated to match your actual UID:GID
     volumes:
-      - ./:/var/www
+      - type: bind
+        source: .
+        target: /var/www
     networks:
       - spr_network
 
@@ -31,11 +33,17 @@ services:
     image: caddy:2
     container_name: spr_caddy
     restart: unless-stopped
+    user: "1001:1001"  # Updated to match your actual UID:GID
     ports:
-      - "8080:80"    # Changed from "80:80"
-      - "8443:443"   # Changed from "443:443"
+      - "8080:80"
+      - "8443:443"
     volumes:
-      - ./Caddyfile:/etc/caddy/Caddyfile
+      - type: bind
+        source: ./Caddyfile
+        target: /etc/caddy/Caddyfile
+      - type: bind
+        source: .
+        target: /var/www
       - caddy_data:/data
       - caddy_config:/config
     networks:
@@ -48,7 +56,6 @@ services:
     security_opt:
       - no-new-privileges:true
     volumes:
-      - /etc/localtime:/etc/localtime:ro
       - /var/run/docker.sock:/var/run/docker.sock:ro
       - portainer_data:/data
     ports:
@@ -63,5 +70,7 @@ networks:
 volumes:
   spr_dbdata:
   caddy_data:
+    driver: local
   caddy_config:
+    driver: local
   portainer_data:
