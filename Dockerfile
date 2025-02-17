@@ -26,18 +26,19 @@ opcache.enable=1\n\
 opcache.enable_cli=1\n\
 opcache.memory_consumption=256\n\
 opcache.max_accelerated_files=20000\n\
-opcache.validate_timestamps=0\n\
+opcache.validate_timestamps=1\n\
 realpath_cache_size=4096K\n\
 realpath_cache_ttl=600\n\
 ' > /usr/local/etc/php/conf.d/opcache.ini
 
+# Configure PHP-FPM to keep environment variables
+RUN echo '\
+[www]\n\
+clear_env = no\n\
+' > /usr/local/etc/php-fpm.d/env.conf
+
 # Get Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-
-# Create system user to run Composer and Symfony Commands
-RUN useradd -G www-data,root -u 1000 -d /home/symfony symfony
-RUN mkdir -p /home/symfony/.composer && \
-    chown -R symfony:symfony /home/symfony
 
 # Set working directory
 WORKDIR /var/www
@@ -45,17 +46,11 @@ WORKDIR /var/www
 # Copy existing application directory
 COPY . /var/www
 
-# Set permissions
-RUN chown -R symfony:symfony /var/www
-
-# Switch to non-root user
-USER symfony
-
 # Install dependencies
-RUN composer install --no-interaction --optimize-autoloader --no-dev
+RUN composer install --no-interaction --optimize-autoloader
 
-# Switch back to root for FPM
-USER root
+# Set permissions for storage
+RUN chown -R www-data:www-data /var/www/var
 
 EXPOSE 9000
 CMD ["php-fpm"]
