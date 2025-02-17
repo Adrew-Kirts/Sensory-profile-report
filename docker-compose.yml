@@ -7,7 +7,11 @@ services:
       dockerfile: Dockerfile
     container_name: spr_app
     restart: unless-stopped
-    user: "1001:1001"
+    environment:
+      - APP_ENV=dev
+      - APP_DEBUG=1
+      - DATABASE_URL=mysql://spr_admin:passw0rdI54321@spr_db:3306/spreport?serverVersion=mariadb-10.6.0&charset=utf8mb4
+      - MESSENGER_TRANSPORT_DSN=doctrine://default
     volumes:
       - type: bind
         source: /opt/spr_project
@@ -23,10 +27,10 @@ services:
     container_name: spr_db
     restart: unless-stopped
     environment:
-      MYSQL_DATABASE: spr_db
+      MYSQL_DATABASE: spreport
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_PASSWORD: dbpassword
-      MYSQL_USER: dbuser
+      MYSQL_USER: spr_admin
+      MYSQL_PASSWORD: passw0rdI54321
     volumes:
       - spr_dbdata:/var/lib/mysql
     networks:
