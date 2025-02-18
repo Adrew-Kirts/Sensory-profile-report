@@ -49,8 +49,12 @@ COPY . /var/www
 # Install dependencies
 RUN composer install --no-interaction --optimize-autoloader
 
+# Install Node.js dependencies and build assets
+RUN npm install
+RUN npm run build
+
 # Set permissions for storage
-RUN chown -R www-data:www-data /var/www/var
+RUN chown -R www-data:www-data /var/www/var /var/www/public/build
 
 EXPOSE 9000
 CMD ["php-fpm"]
