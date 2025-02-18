@@ -9,6 +9,7 @@ use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -32,7 +33,9 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('email')
+            ->add('email', EmailType::class, [
+                'label' => 'Adresse mail'
+            ])
             ->add('registrationCode', TextType::class, [
                 'label' => 'Registration Code',
                 'mapped' => false,
@@ -42,9 +45,15 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('username')
-            ->add('firstName')
-            ->add('lastName')
+            ->add('firstName', TextType::class, [
+                'label' => 'Prénom'
+            ])
+            ->add('lastName', TextType::class, [
+                'label' => 'Nom de famille'
+            ])
+            ->add('username', TextType::class, [
+                'label' => 'Nom d\'utilisateur'
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'Les mots de passe doivent être identiques.',
