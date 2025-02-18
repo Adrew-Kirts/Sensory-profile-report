@@ -66,8 +66,7 @@ class CreateAdminCommand extends Command
             }
         }
 
-        $hashedPassword = $this->passwordHasher->hashPassword($admin, $password);
-        $admin->setPassword($hashedPassword);
+        $admin->setPassword($password);
 
         // Save to database
         $this->entityManager->persist($registrationCode);

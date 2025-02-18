@@ -41,5 +41,5 @@ jobs:
             # Set proper permissions
             docker exec spr_app chown -R www-data:www-data var/
 
-            # Clear opcache
-            docker exec spr_app kill -USR2 1
+            # Clear opcache (alternative method)
+            docker exec spr_app php -r "opcache_reset();" || true
