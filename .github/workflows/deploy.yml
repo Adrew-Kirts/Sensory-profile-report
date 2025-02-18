@@ -1,0 +1,45 @@
+name: Deploy to Production
+
+on:
+  push:
+    branches: [ prod ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Deploy to VPS
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            # Go to project directory
+            cd /opt/spr_project
+
+            # Backup current .env
+            cp .env .env.backup || true
+
+            # Pull latest changes
+            git pull origin prod
+
+            # Restore .env
+            mv .env.backup .env
+
+            # Rebuild and restart app container
+            docker-compose build app
+            docker-compose stop app
+            docker-compose up -d app
+            
+            # Clear cache and run migrations
+            docker exec spr_app php bin/console cache:clear
+            docker exec spr_app php bin/console doctrine:migrations:migrate --no-interaction
+            
+            # Set proper permissions
+            docker exec spr_app chown -R www-data:www-data var/
+
+            # Clear opcache
+            docker exec spr_app kill -USR2 1
