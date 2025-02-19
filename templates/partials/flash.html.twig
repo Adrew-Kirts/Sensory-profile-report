@@ -6,10 +6,7 @@
         'info': 'bg-blue-100 text-blue-900 border-blue-500'
     }[type]|default('bg-blue-100 text-blue-900 border-blue-500') %}
 
-    <div role="alert" class="alert flex items-center gap-2 p-4 rounded-md border {{ alertClass }} w-max m-4">
-        <button type="button" class="p-1 hover:opacity-70 font-bold text-lg" aria-label="Close">
-            x
-        </button>
+    <div role="alert" class="alert flex items-center gap-2 p-3 rounded-md border {{ alertClass }} w-max m-4 cursor-pointer hover:opacity-80 transition-opacity">
         <span>
             {{ messages | join('. ') }}
         </span>
@@ -18,12 +15,12 @@
 
 <script>
     document.querySelectorAll('.alert').forEach(function(alert) {
+        alert.addEventListener('click', function() {
+            this.remove();
+        });
+
         setTimeout(function() {
             alert.remove();
-        }, 4000);
-
-        alert.querySelector('button').addEventListener('click', function() {
-            this.parentNode.remove();
-        });
+        }, 4500);
     });
 </script>
