@@ -15,8 +15,8 @@
         {% endif %}
 
         {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <a href="{{ path('evaluation.index') }}" class="btn btn-primary">Evaluation</a>
-            <a href="{{ path('patient.index') }}" class="btn btn-accent">Liste des patients</a>
+            <a href="{{ path('evaluation.index') }}" class="btn btn-secondary">Evaluation</a>
+            <a href="{{ path('patient.index') }}" class="btn btn-secondary">Liste des patients</a>
             <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
         {% endif %}
     </div>
@@ -26,7 +26,7 @@
             <form action="/patients/search" method="get" class="flex flex-col sm:flex-row items-center gap-4">
                 <label for="search-input" class="block sm:mb-0">Chercher patient:</label>
                 <input type="search" id="search-input" name="keyword" class="input-base border-2 flex-grow">
-                <button type="submit" class="btn btn-neutral btn-sm mt-4 sm:mt-0">Chercher</button>
+                <button type="submit" class="btn btn-accent btn-sm mt-4 sm:mt-0">Chercher</button>
             </form>
         </div>
     {% endif %}
