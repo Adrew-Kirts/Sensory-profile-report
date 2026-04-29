@@ -72,6 +72,25 @@ php bin/console app:create-admin
 - Tailwind CSS: Utility-first CSS framework for styling
 - DaisyUI: Plugin for Tailwind CSS providing additional utility classes
 
+## Branch strategy
+
+This repo runs two parallel branches that are intentionally **not merged**:
+
+- **`prod`** — deployed to the VPS at `spr.strikwerda.fr`. Contains `Dockerfile`, `Caddyfile`, `docker-compose.yml` (MariaDB 10.6), and `.github/workflows/deploy.yml` which auto-deploys on push via SSH. This is the source of truth for what runs in production.
+- **`dev`** — local development only. Uses `compose.yaml` + `compose.override.yaml` (Postgres 16 + Mailpit) for the local Symfony stack. Never deployed.
+- **`main`** — unused legacy branch, kept only because GitHub's default branch points here. Do not commit to it.
+
+### Why the split
+
+The two branches diverged early on (around commit `36dfd21`) when the VPS deployment was set up. `prod` was iterated directly on the server during a debugging spree, while `dev` kept the original Postgres-based local dev environment. The compose files, Dockerfile, and Caddyfile only exist on `prod`; the styling commits exist on both branches but as parallel re-implementations. Trying to merge them now would cause heavy conflicts on infra files for little benefit on a solo side project.
+
+### Working rules
+
+- New code: write on `dev`, run locally against Postgres.
+- Shipping to VPS: cherry-pick the relevant commits onto `prod` and push. CI/CD takes over from there.
+- Do **not** merge `dev` into `prod` or vice-versa.
+- Local DB stack alternative: `mariadb/docker-compose.yml` exists if you want to mirror prod's MariaDB locally instead of the default Postgres compose.
+
 ## Additional Information
 This project aims to simplify the process of generating Sensory Profile 2 reports by providing a user-friendly interface and automated scoring and interpretation functionalities.
 
