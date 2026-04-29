@@ -16,6 +16,7 @@ jobs:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
+          command_timeout: "25m"
           script: |
             # Go to project directory
             cd /opt/spr_project
