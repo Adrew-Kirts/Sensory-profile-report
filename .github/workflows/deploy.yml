@@ -24,8 +24,11 @@ jobs:
             # Backup current .env
             cp .env .env.backup || true
 
-            # Pull latest changes
-            git pull origin prod
+            # Force-sync working tree to origin/prod, discarding any local
+            # mutations made by previous composer/npm builds or stray edits.
+            git fetch origin prod
+            git reset --hard origin/prod
+            git clean -fd -e .env -e .env.backup -e public/build -e var
 
             # Restore .env
             mv .env.backup .env
