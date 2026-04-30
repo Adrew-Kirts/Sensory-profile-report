@@ -2,32 +2,143 @@
 
 {% block title %}Sensory Profile Report{% endblock %}
 
+{% set ageLabels = {
+    0: 'Nourrisson (0-6 mois)',
+    1: 'Jeune enfant (7-35 mois)',
+    2: 'Enfant (3-14 ans)',
+    3: 'Adulte/adolescent (11-65+ ans)'
+} %}
+
 {% block body %}
-    {% block back_button %}{% endblock %}
+    {% if not isAuthenticated %}
+        <div class="flex flex-col items-center mt-12">
+            <img src="{{ asset('images/SPR-logo.png') }}" alt="SPR Logo" style="width: 200px;">
+            <p class="mt-6 text-lg text-center max-w-xl">
+                Outil de génération de profils sensoriels (Sensory Profile 2).
+            </p>
+            <div class="flex space-x-4 mt-8">
+                <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
+                <a href="{{ path('app_login') }}" class="btn btn-secondary">Se connecter</a>
+            </div>
+        </div>
 
-    <div class="flex justify-center mt-4 mb-16">
-        <img src="{{ asset('images/SPR-logo.png') }}" alt="SPR Logo" style="width: 200px;">
-    </div>
+    {% elseif patientCount == 0 %}
+        <div class="max-w-2xl mx-auto mt-12 px-4">
+            <div class="card bg-base-100 shadow-md border border-gray-200">
+                <div class="card-body text-center space-y-6">
+                    <img src="{{ asset('images/SPR-logo.png') }}" alt="SPR" class="w-24 mx-auto">
+                    <h1 class="text-2xl font-bold">Bienvenue {{ firstName }}</h1>
+                    <p class="text-gray-700">
+                        Pour générer un profil sensoriel, suivez ces étapes :
+                    </p>
+                    <ol class="text-left space-y-2 max-w-md mx-auto list-decimal list-inside text-gray-700">
+                        <li>Créer une fiche patient</li>
+                        <li>Choisir une tranche d'âge</li>
+                        <li>Remplir le questionnaire</li>
+                        <li>Consulter et exporter le résultat en PDF</li>
+                    </ol>
+                    <a href="{{ path('patient.create') }}" class="btn btn-primary btn-lg">
+                        Créer mon premier patient
+                    </a>
+                </div>
+            </div>
+        </div>
 
-    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
-        {% if not is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <a href="{{ path('app.register') }}" class="btn btn-neutral">S'enregistrer</a>
-        {% endif %}
+    {% else %}
+        <div class="max-w-6xl mx-auto px-4 py-6 space-y-6">
 
-        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-            <a href="{{ path('evaluation.index') }}" class="btn btn-secondary">Evaluation</a>
-            <a href="{{ path('patient.index') }}" class="btn btn-secondary">Liste des patients</a>
-            <a href="{{ path('patient.create') }}" class="btn btn-secondary">Nouveau patient</a>
-        {% endif %}
-    </div>
+            <div>
+                <h1 class="text-2xl font-bold">Bonjour {{ firstName }}</h1>
+                <p class="text-gray-600 text-sm mt-1">
+                    {{ patientCount }} patient{{ patientCount > 1 ? 's' : '' }} —
+                    {{ surveyCount }} profil{{ surveyCount > 1 ? 's' : '' }} sensoriel{{ surveyCount > 1 ? 's' : '' }}
+                </p>
+            </div>
 
-    {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
-        <div class="mt-12 px-4 sm:px-0">
-            <form action="/patients/search" method="get" class="flex flex-col sm:flex-row items-center gap-4">
-                <label for="search-input" class="block sm:mb-0">Chercher patient:</label>
-                <input type="search" id="search-input" name="keyword" class="input-base border-2 flex-grow">
-                <button type="submit" class="btn btn-accent btn-sm mt-4 sm:mt-0">Chercher</button>
-            </form>
+            <a href="{{ path('evaluation.index') }}"
+               class="block bg-accent hover:bg-primary transition-colors text-black rounded-lg p-6 shadow-md">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <div class="text-xl font-bold">Nouvelle évaluation</div>
+                        <div class="text-sm opacity-80 mt-1">Choisir une tranche d'âge et remplir un questionnaire</div>
+                    </div>
+                    <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6"/>
+                    </svg>
+                </div>
+            </a>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <div class="card bg-base-100 shadow-md border border-gray-200">
+                    <div class="card-body">
+                        <h2 class="text-lg font-bold mb-3">Profils sensoriels récents</h2>
+                        {% if recentSurveys|length == 0 %}
+                            <p class="text-sm text-gray-500">Aucun profil sensoriel pour le moment.</p>
+                        {% else %}
+                            <ul class="divide-y divide-gray-200">
+                                {% for survey in recentSurveys %}
+                                    {% set ageCategory = survey.surveyAnswer.first ? survey.surveyAnswer.first.question.ageCategory : null %}
+                                    <li class="py-2 flex items-center justify-between gap-3">
+                                        <div class="min-w-0">
+                                            <div class="font-medium truncate">
+                                                {{ survey.patient.firstName }} {{ survey.patient.lastName }}
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                {% if ageCategory is not null and ageLabels[ageCategory] is defined %}
+                                                    {{ ageLabels[ageCategory] }} —
+                                                {% endif %}
+                                                {{ survey.createdAt | date('d-m-Y') }}
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('survey.show', {id: survey.id}) }}"
+                                           class="btn btn-sm btn-ghost">Voir</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="card bg-base-100 shadow-md border border-gray-200">
+                    <div class="card-body">
+                        <h2 class="text-lg font-bold mb-3">Patients sans profil sensoriel</h2>
+                        {% if patientsNoSurvey|length == 0 %}
+                            <p class="text-sm text-gray-500">Tous vos patients ont au moins un profil.</p>
+                        {% else %}
+                            <ul class="divide-y divide-gray-200">
+                                {% for patient in patientsNoSurvey %}
+                                    <li class="py-2 flex items-center justify-between gap-3">
+                                        <div class="min-w-0">
+                                            <div class="font-medium truncate">
+                                                {{ patient.firstName }} {{ patient.lastName }}
+                                            </div>
+                                            <div class="text-xs text-gray-500">
+                                                Créé le {{ patient.createdAt | date('d-m-Y') }}
+                                            </div>
+                                        </div>
+                                        <a href="{{ path('evaluation.index') }}"
+                                           class="btn btn-sm btn-secondary">Évaluer</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-6 pt-2">
+                <form action="{{ path('patient.search') }}" method="get"
+                      class="flex flex-1 items-center gap-2">
+                    <label for="search-input" class="text-sm whitespace-nowrap">Chercher patient :</label>
+                    <input type="search" id="search-input" name="keyword"
+                           class="input input-bordered input-sm flex-1">
+                    <button type="submit" class="btn btn-accent btn-sm">Chercher</button>
+                </form>
+                <a href="{{ path('patient.index') }}" class="btn btn-ghost btn-sm whitespace-nowrap">
+                    Voir tous les patients →
+                </a>
+            </div>
         </div>
     {% endif %}
 {% endblock %}

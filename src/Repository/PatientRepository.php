@@ -44,6 +44,19 @@ class PatientRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findWithoutSurveyForUser($user, int $limit = 5): array
+    {
+        return $this->createQueryBuilder('p')
+            ->leftJoin('p.surveys', 's')
+            ->andWhere('p.user = :user')
+            ->andWhere('s.id IS NULL')
+            ->orderBy('p.created_at', 'ASC')
+            ->setParameter('user', $user)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Patient[] Returns an array of Patient objects
     //     */
