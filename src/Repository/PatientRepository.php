@@ -32,6 +32,18 @@ class PatientRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findByKeywordForUser(string $keyword, $user): array
+    {
+        return $this->createQueryBuilder('r')
+            ->andWhere('r.user = :user')
+            ->andWhere('r.first_name LIKE :keyword OR r.last_name LIKE :keyword')
+            ->orderBy('r.updated_at', 'ASC')
+            ->setParameter('keyword', '%'.$keyword.'%')
+            ->setParameter('user', $user)
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Patient[] Returns an array of Patient objects
     //     */

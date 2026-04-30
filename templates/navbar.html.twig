@@ -32,6 +32,7 @@
 
                 <div class="relative ml-3">
                     {% if app.user %}
+                        <a href="{{ path('user.profile') }}" class="text-white hover:bg-gray-800 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Mon profil</a>
                         <a href="{{ path('app_logout') }}" class="text-white hover:bg-gray-800 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Déconnexion</a>
                     {% else %}
                         <a href="{{ path('app_login') }}" class="text-white hover:bg-gray-800 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Se connecter</a>

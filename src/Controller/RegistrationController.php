@@ -38,7 +38,6 @@ class RegistrationController extends AbstractController
                 $this->addFlash('error', 'Code invalide ou déjà utilisé');
                 return $this->redirectToRoute('app.register');
             }
-//            $user->setRoles(['ROLE_USER']);
             $user->setRegistrationCode($code);
             $code->setIsUsed(true);
             $code->setUsedBy($user);

@@ -10,7 +10,9 @@ use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[IsGranted('ROLE_USER')]
 class SurveyController extends AbstractController
 {
     #[Route('/survey', name: 'survey.index')]
@@ -26,6 +28,7 @@ class SurveyController extends AbstractController
     #[Route('/survey/{id}', name: 'survey.show', requirements: ['id' => '[0-9]+'])]
     public function show(Survey $survey, SurveyAnswerRepository $repository): Response
     {
+        $this->denyAccessUnlessOwner($survey);
         $answers = $repository->findBy(['survey' => $survey->getId()]);
         $questions = $survey->getSurveyAnswer()->map(fn($answer) => $answer->getQuestion());
         $ageCategory = $questions->first()->getAgeCategory();
@@ -35,7 +38,7 @@ class SurveyController extends AbstractController
             1 => 'survey/show1.html.twig',
             2 => 'survey/show2.html.twig',
             3 => 'survey/show3.html.twig',
-//            default => 'survey/show0html.twig',
+            default => 'survey/show3.html.twig',
         };
 
         return $this->render($template, [
@@ -47,6 +50,7 @@ class SurveyController extends AbstractController
     #[Route('/survey/{id}/export', name: 'survey.export', requirements: ['id' => '[0-9]+'])]
     public function export(Survey $survey, SurveyAnswerRepository $repository): Response
     {
+        $this->denyAccessUnlessOwner($survey);
         $answers = $repository->findBy(['survey' => $survey->getId()]);
         $questions = $survey->getSurveyAnswer()->map(fn($answer) => $answer->getQuestion());
         $ageCategory = $questions->first()->getAgeCategory();
@@ -56,6 +60,7 @@ class SurveyController extends AbstractController
             1 => 'survey/export1.html.twig',
             2 => 'survey/export2.html.twig',
             3 => 'survey/export3.html.twig',
+            default => 'survey/export3.html.twig',
         };
 
         $html = $this->renderView($template, [
@@ -70,14 +75,27 @@ class SurveyController extends AbstractController
         $dompdf->setPaper('A4', 'portrait');
         $dompdf->render();
 
-        $firstName = $survey->getPatient()->getFirstName();
-        $lastName = $survey->getPatient()->getLastName();
+        $firstName = $this->sanitizeFilenamePart((string) $survey->getPatient()->getFirstName());
+        $lastName = $this->sanitizeFilenamePart((string) $survey->getPatient()->getLastName());
         $surveyDate = $survey->getCreatedAt()->format('d-m-Y');
+        $filename = sprintf('profil_sensoriel_%s_%s_%s.pdf', $firstName, $lastName, $surveyDate);
 
         return new Response($dompdf->output(), 200, [
             'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'attachment; filename="profil_sensoriel_'.$firstName.'_'.$lastName.'_'.$surveyDate.'.pdf"',
+            'Content-Disposition' => 'attachment; filename="'.$filename.'"',
         ]);
     }
 
+    private function denyAccessUnlessOwner(Survey $survey): void
+    {
+        if ($survey->getUser() !== $this->getUser()) {
+            throw $this->createAccessDeniedException();
+        }
+    }
+
+    private function sanitizeFilenamePart(string $value): string
+    {
+        $value = preg_replace('/[^a-zA-Z0-9_-]/', '', $value) ?? '';
+        return $value === '' ? 'patient' : $value;
+    }
 }

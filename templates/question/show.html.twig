@@ -59,7 +59,7 @@
                                     <label for="answer{{ i }}_{{ question.id }}">{{ i }}</label>
                                     <input type="radio" id="answer{{ i }}_{{ question.id }}"
                                            name="answers[{{ question.id }}]"
-                                           value="{{ i }}" {{ i == 0 ? 'checked' : '' }}/>
+                                           value="{{ i }}" required/>
                                 </div>
                             {% endfor %}
                         </td>
