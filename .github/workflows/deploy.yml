@@ -41,9 +41,14 @@ jobs:
             # Rebuild frontend assets (bind mount overlays the image-built assets)
             docker exec spr_app npm run build
 
-            # Clear cache and run migrations
-            docker exec spr_app php bin/console cache:clear
+            # Clear cache, warm it, and run migrations
+            docker exec spr_app rm -rf var/cache/prod var/cache/dev
+            docker exec spr_app php bin/console cache:clear --env=prod --no-debug
+            docker exec spr_app php bin/console cache:warmup --env=prod --no-debug
             docker exec spr_app php bin/console doctrine:migrations:migrate --no-interaction
+
+            # Force PHP-FPM reload to flush opcache
+            docker exec spr_app sh -c 'kill -USR2 1' || docker-compose restart app
 
             # Set proper permissions
             docker exec spr_app chown -R www-data:www-data var/ public/build/
