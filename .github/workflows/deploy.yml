@@ -36,6 +36,7 @@ jobs:
             mv .env.backup .env
 
             docker exec spr_app composer install --no-interaction --optimize-autoloader
+            docker exec spr_app chown -R www-data:www-data var/
 
             # Rebuild and restart app container
             docker-compose build app
