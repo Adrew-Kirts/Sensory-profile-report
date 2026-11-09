@@ -32,7 +32,7 @@
                 <td>
                     {% if patient.surveys|length == 0 %}
                         {#                        <a>Pas de profil sensoriel rempli</a> #}
-                        <a href="{{ path('evaluation.index') }}" class="btn btn-xs text-xs text-white btn-active">Nouveau profil
+                        <a href="{{ path('evaluation.index', {'patient': patient.id}) }}" class="btn btn-xs text-xs text-white btn-active">Nouveau profil
                             sensoriel</a>
 
                     {% endif %}

@@ -46,6 +46,14 @@ class PatientController extends AbstractController
             $entityManager->persist($patient);
             $entityManager->flush();
             $this->addFlash('success', 'La fiche patient a bien été créée');
+
+            $ageCategory = $request->query->get('ageCategory');
+            if ($ageCategory !== null && ctype_digit($ageCategory) === true) {
+                return $this->redirectToRoute('question.indexByAge', [
+                    'ageCategory' => (int) $ageCategory,
+                    'patient' => $patient->getId(),
+                ]);
+            }
             return $this->redirectToRoute('patient.index');
         }
         return $this->render('patient/create.html.twig', [

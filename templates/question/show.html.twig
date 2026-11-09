@@ -16,15 +16,32 @@
         <a class="text-xl">{{ ageCategories[ageCategory] ?? 'Unknown' }}</a>
     </div>
 
+    {% if patient is null %}
+    <div class="w-full max-w-md mx-auto mt-6 p-6 bg-white shadow-lg rounded-lg text-center">
+        {% if patients is empty %}
+            <p class="mb-4">Aucun patient enregistré. Créez d'abord la fiche du patient pour remplir son profil sensoriel.</p>
+        {% else %}
+            <p class="mb-4">Choisissez le patient avant de remplir le profil sensoriel.</p>
+            <form action="{{ path('question.indexByAge', {'ageCategory': ageCategory}) }}" method="GET">
+                <select class="select select-accent w-full" name="patient" required>
+                    <option disabled selected value="">Choisir patient</option>
+                    {% for p in patients %}
+                        <option value="{{ p.id }}">{{ p.firstName }} {{ p.lastName }}</option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary w-full mt-4">Commencer le profil</button>
+            </form>
+            <div class="divider">ou</div>
+        {% endif %}
+        <a href="{{ path('patient.create', {'ageCategory': ageCategory}) }}" class="btn btn-secondary w-full">Nouveau patient</a>
+    </div>
+    {% else %}
     <form action="{{ path('question.saveAnswers', {'ageCategory': ageCategory}) }}" method="POST">
-        <label>
-            <select class="select select-accent w-full max-w-xs mt-4" name="patientId" required>
-                <option disabled selected value="">Choisir patient</option>
-                {% for patient in patients %}
-                    <option value="{{ patient.id }}">{{ patient.firstName }} {{ patient.lastName }}</option>
-                {% endfor %}
-            </select>
-        </label>
+        <input type="hidden" name="patientId" value="{{ patient.id }}">
+        <p class="text-center mt-4">
+            Patient : <strong>{{ patient.firstName }} {{ patient.lastName }}</strong>
+            <a href="{{ path('question.indexByAge', {'ageCategory': ageCategory}) }}" class="link link-accent text-sm ml-2">changer</a>
+        </p>
 
         <div class="sticky top-0 z-30 w-full shadow-md border-b border-gray-300" style="background-color: #f3f4f6;">
             <div class="max-w-4xl mx-auto p-3">
@@ -70,6 +87,7 @@
             <button type="submit" class="btn btn-primary w-full mt-4">Enregistrer</button>
         </div>
     </form>
+    {% endif %}
 
 {% endblock %}
 

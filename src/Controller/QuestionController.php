@@ -26,13 +26,24 @@ class QuestionController extends AbstractController
     }
 
     #[Route('/question/{ageCategory}', name: 'question.indexByAge', requirements: ['ageCategory' => '[0-9]+'])]
-    public function indexByAge(QuestionRepository $questionRepository, PatientRepository $patientRepository, int $ageCategory): Response
+    public function indexByAge(Request $request, QuestionRepository $questionRepository, PatientRepository $patientRepository, int $ageCategory): Response
     {
-        $questions = $questionRepository->findBy(['ageCategory' => $ageCategory]);
         $patients = $patientRepository->findBy(['user' => $this->getUser()]);
+
+        $patient = null;
+        $patientId = $request->query->getInt('patient');
+        if ($patientId > 0) {
+            $patient = $patientRepository->find($patientId);
+            if (!$patient instanceof Patient || $patient->getUser() !== $this->getUser()) {
+                throw $this->createAccessDeniedException();
+            }
+        }
+
+        $questions = $patient instanceof Patient ? $questionRepository->findBy(['ageCategory' => $ageCategory]) : [];
         return $this->render('question/show.html.twig', [
             'questions' => $questions,
             'patients' => $patients,
+            'patient' => $patient,
             'ageCategory' => $ageCategory,
         ]);
     }

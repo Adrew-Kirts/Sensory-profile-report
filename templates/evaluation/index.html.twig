@@ -8,32 +8,32 @@
         <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title text-nowrap">Nourrisson (0-6M)</h2>
-                <a href="{{ path('question.indexByAge', {'ageCategory': 0}) }}" class="btn btn-sm btn-secondary">Accéder</a>
+                <a href="{{ path('question.indexByAge', {'ageCategory': 0, 'patient': app.request.query.get('patient')}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
         <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title">Jeune enfant (7-35M)</h2>
-                <a href="{{ path('question.indexByAge', {'ageCategory': 1}) }}" class="btn btn-sm btn-secondary">Accéder</a>
+                <a href="{{ path('question.indexByAge', {'ageCategory': 1, 'patient': app.request.query.get('patient')}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
         <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title">Enfant (3-14A)</h2>
-                <a href="{{ path('question.indexByAge', {'ageCategory': 2}) }}" class="btn btn-sm btn-secondary">Accéder</a>
+                <a href="{{ path('question.indexByAge', {'ageCategory': 2, 'patient': app.request.query.get('patient')}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
         <div class="card border-2 border-accent">
             <div class="card-body">
                 <h2 class="card-title whitespace-normal">Adulte/Ado (11-65+ ans)</h2>
-                <a href="{{ path('question.indexByAge', {'ageCategory': 3}) }}" class="btn btn-sm btn-secondary">Accéder</a>
+                <a href="{{ path('question.indexByAge', {'ageCategory': 3, 'patient': app.request.query.get('patient')}) }}" class="btn btn-sm btn-secondary">Accéder</a>
             </div>
         </div>
 {#        //TODO add this block#}
 {#        <div class="card border-2 border-accent">#}
 {#            <div class="card-body">#}
 {#                <h2 class="card-title whitespace-nowrap">Compagnon scolaire (3-14A)</h2>#}
-{#                <a href="{{ path('question.indexByAge', {'ageCategory': 4}) }}" class="btn btn-sm btn-secondary">Accéder</a>#}
+{#                <a href="{{ path('question.indexByAge', {'ageCategory': 4, 'patient': app.request.query.get('patient')}) }}" class="btn btn-sm btn-secondary">Accéder</a>#}
 {#            </div>#}
 {#        </div>#}
 {#    </div>#}
