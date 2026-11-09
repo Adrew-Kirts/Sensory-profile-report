@@ -18,6 +18,8 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           command_timeout: "25m"
           script: |
+            set -e
+
             # Go to project directory
             cd /opt/spr_project
 
@@ -32,6 +34,8 @@ jobs:
 
             # Restore .env
             mv .env.backup .env
+
+            docker exec spr_app composer install --no-interaction --optimize-autoloader
 
             # Rebuild and restart app container
             docker-compose build app
