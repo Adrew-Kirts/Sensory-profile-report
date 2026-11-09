@@ -46,6 +46,7 @@
         "symfony/web-link": "^7.0",
         "symfony/webpack-encore-bundle": "^2.1",
         "symfony/yaml": "^7.0",
+        "symfonycasts/reset-password-bundle": "^1.26",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -55,7 +56,10 @@
             "symfony/flex": true,
             "symfony/runtime": true
         },
-        "sort-packages": true
+        "sort-packages": true,
+        "platform": {
+            "php": "8.2.30"
+        }
     },
     "autoload": {
         "psr-4": {

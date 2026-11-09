@@ -8,7 +8,7 @@ use Doctrine\Persistence\ObjectManager;
 
 class QuestionFixtures3 extends Fixture
 {
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         // 3 Questionnaire Ado / adulte
         $questions = [
